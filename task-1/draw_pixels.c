@@ -15,54 +15,21 @@ struct fb_var_screeninfo vinfo;
 
 unsigned char char_bitmap[sizeof(char)][bitmap_size_x][bitmap_size_y];
 
-uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b)
-{
-	return (r<<vinfo.red.offset) | (g<<vinfo.green.offset) | (b<<vinfo.blue.offset);
-}
-
+uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b);
 /**
  * Render whole screen color to be 'color'
  */
-void clear_screen(uint32_t color)
-{
-    for (int x = 0; x < vinfo.xres; x++)
-		for (int y = 0; y < vinfo.yres; y++)
-		{
-            // Set a pixel in a specific location to specific color
-			long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
-            // Render the pixel in the screen
-			*((uint32_t*)(fbp + location)) = color;
-		}
-}
-
+void clear_screen(uint32_t color);
 /**
  * Print list of pixel location on the screen in 'color'
  */
-int print_bmp(char* filename, int posx, int posy, uint32_t color)
-{
-    FILE *bmp = fopen(filename, "r");
-    
-    int x, y;
-    fscanf(bmp, "%d,%d", &x, &y);
-    while (!feof(bmp))
-    {
-        if (x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0) continue;
-        
-        // Set a pixel in a specific location to specific color
-        long location = (x + vinfo.xoffset + posx) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset + posy) * finfo.line_length;
-        // Render the pixel in the screen
-        *((uint32_t*)(fbp + location)) = color;
-        
-        fscanf(bmp, "%d,%d", &x, &y);
-    }
-    
-}
+int print_bmp(char* filename, int posx, int posy, uint32_t color);
 
-int main(int argc, char** argv)
-{
+
+int main(int argc, char** argv) {
     // Get input (argv[1]) which containst list of pixel
     if (argc != 2) {
-        printf("params: <filename>");
+        printf("params: <filename>\n");
         return 1;
     }
     
@@ -98,7 +65,7 @@ int main(int argc, char** argv)
     // Render the screen to whole black
     clear_screen(pixel_color(0, 0, 0));
     // Print image from input (argv[1] which contains list of pixel location) all white
-    print_bmp(argv[1], 0, 0, pixel_color(255, 255, 255));
+    print_bmp(argv[1], 0, 0, pixel_color(255, 0, 0));
 
     // Wait for input
     getchar();
@@ -106,4 +73,39 @@ int main(int argc, char** argv)
     ioctl(tty_fd,KDSETMODE,KD_TEXT);
     
 	return 0;
+}
+
+
+uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b) {
+    return (r<<vinfo.red.offset) | (g<<vinfo.green.offset) | (b<<vinfo.blue.offset);
+}
+
+
+void clear_screen(uint32_t color) {
+    for (int x = 0; x < vinfo.xres; x++) {
+        for (int y = 0; y < vinfo.yres; y++) {
+            // Set a pixel in a specific location to specific color
+            long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
+            // Render the pixel in the screen
+            *((uint32_t*)(fbp + location)) = color;
+        }
+    }
+}
+
+
+int print_bmp(char* filename, int posx, int posy, uint32_t color) {
+    FILE *bmp = fopen(filename, "r");
+    
+    int x, y;
+    fscanf(bmp, "%d,%d", &x, &y);
+    while (!feof(bmp)) {
+        if (x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0) continue;
+        
+        // Set a pixel in a specific location to specific color
+        long location = (x + vinfo.xoffset + posx) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset + posy) * finfo.line_length;
+        // Render the pixel in the screen
+        *((uint32_t*)(fbp + location)) = color;
+        
+        fscanf(bmp, "%d,%d", &x, &y);
+    } 
 }
