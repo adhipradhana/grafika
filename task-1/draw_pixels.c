@@ -58,6 +58,17 @@ int print_bmp(char* filename, int posx, int posy, uint32_t color)
     
 }
 
+// NEW FUNCTION : print_point(int x,int y, uint32_t color)
+int print_point(int x,int y, uint32_t color)
+{
+    if (x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0) continue;
+        
+    // Set a pixel in a specific location to specific color
+    long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
+    // Render the pixel in the screen
+    *((uint32_t*)(fbp + location)) = color;
+}
+
 int main(int argc, char** argv)
 {
     // Get input (argv[1]) which containst list of pixel
