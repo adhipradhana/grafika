@@ -208,19 +208,3 @@ void print_horizontal_line(int x1, int y1, int x2, int y2, int color){
         print_point(i, y1, color);
     }
 }
-
-void print_line_large_slope(int x1, int y1, int x2, int y2, uint32_t color) {
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-    int x = x1;
-    int eps = 0;
-
-    for (int y = y1; y <= y2; y++) {
-        print_point(x, y, color);
-        eps += dx;
-
-        if ((eps << 1) >= dy) {
-            x++;  eps -= dy;
-        }
-    }
-}
