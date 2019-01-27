@@ -84,9 +84,7 @@ int main(int argc, char** argv) {
 
 void print_point(int x,int y, uint32_t color) {
     if (!(x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0)) {
-        // Set a pixel in a specific location to specific color
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
-        // Render the pixel in the screen
         *((uint32_t*)(fbp + location)) = color;
     }
 }
@@ -100,9 +98,7 @@ uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b) {
 void clear_screen(uint32_t color) {
     for (int x = 0; x < vinfo.xres; x++) {
         for (int y = 0; y < vinfo.yres; y++) {
-            // Set a pixel in a specific location to specific color
             long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
-            // Render the pixel in the screen
             *((uint32_t*)(fbp + location)) = color;
         }
     }
