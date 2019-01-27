@@ -16,16 +16,14 @@ struct fb_var_screeninfo vinfo;
 unsigned char char_bitmap[sizeof(char)][bitmap_size_x][bitmap_size_y];
 
 uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b);
-/**
- * Render whole screen color to be 'color'
- */
+
 void clear_screen(uint32_t color);
-/**
- * Print list of pixel location on the screen in 'color'
- */
-int print_bmp(char* filename, int posx, int posy, uint32_t color);
 
 int print_point(int x,int y, uint32_t color);
+
+void print_line(int x1, int y1,int x2, int y2, uint32_t color);
+
+void print_file(char* filename, int posx, int posy, uint32_t color);
 
 int main(int argc, char** argv) {
     // Get input (argv[1]) which containst list of pixel
@@ -66,7 +64,7 @@ int main(int argc, char** argv) {
     // Render the screen to whole black
     clear_screen(pixel_color(0, 0, 0));
     // Print image from input (argv[1] which contains list of pixel location) all white
-    print_bmp(argv[1], 0, 0, pixel_color(255, 0, 0));
+    print_file(argv[1], 0, 0, pixel_color(255, 0, 0));
 
     // Wait for input
     getchar();
@@ -77,7 +75,7 @@ int main(int argc, char** argv) {
 }
 
 int print_point(int x,int y, uint32_t color) {
-    if (!(x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0)) {     
+    if (!(x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0)) {
         // Set a pixel in a specific location to specific color
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
         // Render the pixel in the screen
@@ -103,14 +101,31 @@ void clear_screen(uint32_t color) {
 }
 
 
-int print_bmp(char* filename, int posx, int posy, uint32_t color) {
-    FILE *bmp = fopen(filename, "r");
+void print_file(char* filename, int posx, int posy, uint32_t color) {
+    FILE *file = fopen(filename, "r");
     
-    int x, y;
-    fscanf(bmp, "%d,%d", &x, &y);
-    while (!feof(bmp)) {
-        print_point(x, y, color);
+    int x1, y1, x2, y2;
+    fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
+
+    while (!feof(file)) {
+        print_line(x1, y1, x2, y2, color);
         
-        fscanf(bmp, "%d,%d", &x, &y);
+        fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
     } 
+}
+
+void print_line(int x1, int y1, int x2, int y2, uint32_t color) {
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int y = y1;
+    int eps = 0;
+
+    for (int x = x1; x <= x2; x++) {
+        print_point(x, y, color);
+        eps += dy;
+
+        if ((eps << 1) >= dx) {
+            y++;  eps -= dx;
+        }
+    }
 }
