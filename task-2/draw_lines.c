@@ -1,10 +1,12 @@
 #include <linux/fb.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <sys/kd.h>
+#include <string.h>
 
 #define bitmap_size_x 32
 #define bitmap_size_y 32
@@ -19,11 +21,17 @@ uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b);
 
 void clear_screen(uint32_t color);
 
-int print_point(int x,int y, uint32_t color);
+void print_point(int x,int y, uint32_t color);
 
-void print_line(int x1, int y1,int x2, int y2, uint32_t color);
+void print_line_small(int x1, int y1,int x2, int y2, uint32_t color);
+
+void print_line_large(int x1, int y1,int x2, int y2, uint32_t color);
 
 void print_file(char* filename, int posx, int posy, uint32_t color);
+
+void print_vertical_line(int x1, int y1, int x2, int y2, int color);
+
+void print_horizontal_line(int x1, int y1, int x2, int y2, int color);
 
 int main(int argc, char** argv) {
     // Get input (argv[1]) which containst list of pixel
@@ -74,7 +82,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-int print_point(int x,int y, uint32_t color) {
+void print_point(int x,int y, uint32_t color) {
     if (!(x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0)) {
         // Set a pixel in a specific location to specific color
         long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
@@ -108,24 +116,95 @@ void print_file(char* filename, int posx, int posy, uint32_t color) {
     fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
 
     while (!feof(file)) {
-        print_line(x1, y1, x2, y2, color);
+        if (x1 >= vinfo.xres || y1 >= vinfo.yres || x1 < 0 || y1 < 0) continue;
+        if (x2 >= vinfo.xres || y2 >= vinfo.yres || x2 < 0 || y2 < 0) continue;
+
+        if (x1 == x2) {
+            if (y1 < y2) {
+                print_vertical_line(x1, y1, x2, y2, color);
+            } else {
+                print_vertical_line(x1, y2, x2, y1, color);
+            }
+        } else if (y1 == y2){
+            if (x1 < x2) {
+                print_horizontal_line(x1, y1, x2, y2, color);
+            } else {
+                print_horizontal_line(x2, y1, x1, y2, color);
+            }
+        } else {
+            if (abs(y2 - y1) < abs(x2 - x1)) {
+                if (x1 > x2) {
+                    print_line_small(x2, y2, x1, y1, color);
+                } else {
+                    print_line_small(x1, y1, x2, y2, color);
+                }
+            } else {
+                if (y1 > y2) {
+                  print_line_large(x2, y2, x1, y1, color);
+                } else {
+                  print_line_large(x1, y1, x2, y2, color);
+                }
+            }
+        }
         
         fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
     } 
 }
 
-void print_line(int x1, int y1, int x2, int y2, uint32_t color) {
+void print_line_small(int x1, int y1, int x2, int y2, uint32_t color) {
     int dx = x2 - x1;
     int dy = y2 - y1;
+    int yi = 1;
+    if (dy < 0){
+        yi = -1;
+        dy = -dy;
+    }
+        
+    int D = 2*dy - dx;
     int y = y1;
-    int eps = 0;
 
     for (int x = x1; x <= x2; x++) {
         print_point(x, y, color);
-        eps += dy;
 
-        if ((eps << 1) >= dx) {
-            y++;  eps -= dx;
+        if (D > 0){
+            y = y + yi;
+            D = D - 2 * dx;
         }
+        D = D + 2 * dy;
+    }
+}
+
+void print_line_large(int x1, int y1, int x2, int y2, uint32_t color) {
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int xi = 1;
+    if (dx < 0) {
+        xi = -1;
+        dx = -dx;
+    }
+        
+    int D = 2*dx - dy;
+    int x = x1;
+
+    for (int y = y1; y <= y2; y++) {
+        print_point(x, y, color);
+
+        if (D > 0) {
+            x = x + xi;
+            D = D - 2 * dy;
+        }
+        D = D + 2 * dx;
+    }
+}
+
+void print_vertical_line(int x1, int y1, int x2, int y2, int color) {
+    for (int i = y1; i <= y2; ++i) {
+        print_point(x1, i, color);
+    }
+}
+
+void print_horizontal_line(int x1, int y1, int x2, int y2, int color){
+    for (int i = x1; i <= x2; ++i) {
+        print_point(i, y1, color);
     }
 }
