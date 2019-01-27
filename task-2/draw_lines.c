@@ -114,7 +114,7 @@ void print_file(char* filename, int posx, int posy, uint32_t color) {
     } 
 }
 
-void print_line(int x1, int y1, int x2, int y2, uint32_t color) {
+void print_line_small_slope(int x1, int y1, int x2, int y2, uint32_t color) {
     int dx = x2 - x1;
     int dy = y2 - y1;
     int y = y1;
@@ -127,5 +127,34 @@ void print_line(int x1, int y1, int x2, int y2, uint32_t color) {
         if ((eps << 1) >= dx) {
             y++;  eps -= dx;
         }
+    }
+}
+
+void print_line_large_slope(int x1, int y1, int x2, int y2, uint32_t color) {
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int x = x1;
+    int eps = 0;
+
+    for (int y = y1; y <= y2; y++) {
+        print_point(x, y, color);
+        eps += dx;
+
+        if ((eps << 1) >= dy) {
+            x++;  eps -= dy;
+        }
+    }
+}
+
+void print_line(int x1, int y1, int x2, int y2, uint32_t color) {
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int y = y1;
+    int eps = 0;
+
+    if (dy > dx) {
+        print_line_large_slope(x1, y1, x2, y2, color);
+    } else {
+        print_line_small_slope(x1, y1, x2, y2, color);
     }
 }
