@@ -203,8 +203,8 @@ void print_circle(int x0, int y0, int r, uint32_t color) {
 }
 
 void print_line(int x1, int y1, int x2, int y2, uint32_t color) {
-    if (x1 >= vinfo.xres || y1 >= vinfo.yres || x1 < 0 || y1 < 0) continue;
-    if (x2 >= vinfo.xres || y2 >= vinfo.yres || x2 < 0 || y2 < 0) continue;
+    if (x1 >= vinfo.xres || y1 >= vinfo.yres || x1 < 0 || y1 < 0) return;
+    if (x2 >= vinfo.xres || y2 >= vinfo.yres || x2 < 0 || y2 < 0) return;
 
     if (x1 == x2) {
         if (y1 < y2) {
