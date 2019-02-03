@@ -112,7 +112,7 @@ void print_file(char* filename, int posx, int posy, uint32_t color) {
     fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
 
     while (!feof(file)) {
-        print_line(x1, y1, x2, y2);
+        print_line(x1, y1, x2, y2, color);
         fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
     } 
 }
