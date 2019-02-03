@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
     clear_screen(pixel_color(0, 0, 0));
     // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
     print_file_polygon(argv[1], pixel_color(255, 0, 0));
-    print_file_circle(argv[1], pixel_color(255, 0, 0));
+    print_file_circle(argv[2], pixel_color(255, 0, 0));
 
     // Wait for input
     getchar();
