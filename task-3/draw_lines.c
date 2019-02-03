@@ -27,7 +27,15 @@ void print_line_small(int x1, int y1,int x2, int y2, uint32_t color);
 
 void print_line_large(int x1, int y1,int x2, int y2, uint32_t color);
 
-void print_file(char* filename, int posx, int posy, uint32_t color);
+// void print_file(char* filename, int posx, int posy, uint32_t color);
+
+void print_file_polygon(char* filename, uint32_t color);
+
+void print_file_circle(char* filename, uint32_t color);
+
+void print_polygon(int n, int* arr_coordinate, uint32_t color);
+
+void print_circle(int x0, int y0, int r, uint32_t color);
 
 void print_vertical_line(int x1, int y1, int x2, int y2, int color);
 
@@ -35,8 +43,8 @@ void print_horizontal_line(int x1, int y1, int x2, int y2, int color);
 
 int main(int argc, char** argv) {
     // Get input (argv[1]) which containst list of pixel
-    if (argc != 2) {
-        printf("params: <filename>\n");
+    if (argc != 3) {
+        printf("params: <filename_poly> <filename_circle>\n");
         return 1;
     }
     
@@ -71,8 +79,9 @@ int main(int argc, char** argv) {
 
     // Render the screen to whole black
     clear_screen(pixel_color(0, 0, 0));
-    // Print image from input (argv[1] which contains list of pixel location) all white
-    print_file(argv[1], 0, 0, pixel_color(255, 0, 0));
+    // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
+    print_file_polygon(argv[1], pixel_color(255, 0, 0));
+    print_file_circle(argv[1], pixel_color(255, 0, 0));
 
     // Wait for input
     getchar();
@@ -105,26 +114,56 @@ void clear_screen(uint32_t color) {
 }
 
 
-void print_file(char* filename, int posx, int posy, uint32_t color) {
+// void print_file(char* filename, int posx, int posy, uint32_t color) {
+//     FILE *file = fopen(filename, "r");
+    
+//     int x1, y1, x2, y2;
+//     fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
+
+//     while (!feof(file)) {
+//         print_line(x1, y1, x2, y2, color);
+//         fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
+//     } 
+// }
+
+void print_file_polygon(char* filename, uint32_t color) {
     FILE *file = fopen(filename, "r");
     
-    int x1, y1, x2, y2;
-    fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
+    int n, x, y;
+    fscanf(file, "%d", &n);
 
     while (!feof(file)) {
-        print_line(x1, y1, x2, y2, color);
-        fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
+        int arr_coordinate[n*2];
+        for (int i = 0; (i < n) && !feof(file); i++) {
+            fscanf(file, "%d,%d", &x, &y);
+            arr_coordinate[i*2] = x;
+            arr_coordinate[i*2+1] = y;
+        }
+        print_polygon(n, arr_coordinate, color);
+        fscanf(file, "%d", &n);
+    }
+}
+
+void print_file_circle(char* filename, uint32_t color) {
+    FILE *file = fopen(filename, "r");
+    
+    int x0, y0, r;
+    fscanf(file, "%d,%d,%d", &x0, &y0, &r);
+
+    while (!feof(file)) {
+        print_circle(x0, y0, r, color);
+        fscanf(file, "%d,%d,%d", &x0, &y0, &r);
     } 
 }
 
-void print_polygon(int n, int* arr_coordinate) {
+void print_polygon(int n, int* arr_coordinate, uint32_t color) {
     int i = 0;
     while (i < (n*2)-2) {
-        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3]);
+        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
         i += 2;
     }
     if (n > 1) {
-        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1]);
+        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
     }
 }
 
