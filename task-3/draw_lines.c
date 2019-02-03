@@ -117,6 +117,52 @@ void print_file(char* filename, int posx, int posy, uint32_t color) {
     } 
 }
 
+void print_polygon(int n, int* arr_coordinate) {
+    int i = 0;
+    while (i < (n*2)-2) {
+        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3]);
+        i += 2;
+    }
+    if (n > 1) {
+        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1]);
+    }
+}
+
+void print_circle(int x0, int y0, int r, uint32_t color) {
+    int x = r-1;
+    int y = 0;
+    int dx = 1;
+    int dy = 1;
+    int err = dx - (r << 1);
+
+    while (x >= y)
+    {
+        print_point(x0 + x, y0 + y, color);
+        print_point(x0 + y, y0 + x, color);
+
+        print_point(x0 - y, y0 + x, color);
+        print_point(x0 - x, y0 + y, color);
+
+        print_point(x0 - x, y0 - y, color);
+        print_point(x0 - y, y0 - x, color);
+
+        print_point(x0 + y, y0 - x, color);
+        print_point(x0 + x, y0 - y, color);
+
+        if (err <= 0) {
+            y++;
+            err += dy;
+            dy += 2;
+        }
+        
+        if (err > 0) {
+            x--;
+            dx += 2;
+            err += dx - (r << 1);
+        }
+    }
+}
+
 void print_line(int x1, int y1, int x2, int y2, uint32_t color) {
     if (x1 >= vinfo.xres || y1 >= vinfo.yres || x1 < 0 || y1 < 0) continue;
     if (x2 >= vinfo.xres || y2 >= vinfo.yres || x2 < 0 || y2 < 0) continue;
