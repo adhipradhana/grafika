@@ -23,6 +23,8 @@ void clear_screen(uint32_t color);
 
 void print_point(int x,int y, uint32_t color);
 
+void print_line(int x1, int y1, int x2, int y2, uint32_t color);
+
 void print_line_small(int x1, int y1,int x2, int y2, uint32_t color);
 
 void print_line_large(int x1, int y1,int x2, int y2, uint32_t color);
