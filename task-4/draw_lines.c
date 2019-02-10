@@ -7,6 +7,7 @@
 #include <sys/ioctl.h>
 #include <sys/kd.h>
 #include <string.h>
+#include <math.h>
 
 #define bitmap_size_x 32
 #define bitmap_size_y 32
@@ -29,8 +30,6 @@ void print_line_small(int x1, int y1,int x2, int y2, uint32_t color);
 
 void print_line_large(int x1, int y1,int x2, int y2, uint32_t color);
 
-// void print_file(char* filename, int posx, int posy, uint32_t color);
-
 void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter);
 
 void print_file_circle(char* filename, uint32_t color, int (*circle_save_points)[3], int* iter);
@@ -44,6 +43,10 @@ void print_vertical_line(int x1, int y1, int x2, int y2, int color);
 void print_horizontal_line(int x1, int y1, int x2, int y2, int color);
 
 void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int dx, int dy, uint32_t color);
+
+void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float scale_factor, uint32_t color);
+
+void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float rot_degree, uint32_t color);
 
 void print_polygon_save(int* polygon_save_sides, int (*polygon_save_points)[1000], int iter, uint32_t color);
 
@@ -98,42 +101,50 @@ int main(int argc, char** argv) {
     print_file_polygon(argv[1], pixel_color(255, 0, 0), polygon_save_sides, polygon_save_points, &iter_polygon);
     print_file_circle(argv[2], pixel_color(255, 0, 0), circle_save_points, &iter_circle);
 
-    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, pixel_color(255, 0, 0));
-    print_circle_save(circle_save_points, iter_circle, pixel_color(255, 0, 0));
-
     // Wait for input
     char input = getchar();
     while(1) {
-        if (input == '\033') { // if the first value is esc
-            getchar(); // skip the [
-            switch(getchar()) { // the real value
-                case 'A':
-                    // code for arrow up
-                    translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, -10, pixel_color(255, 0, 0));
-                    break;
-                case 'B':
-                    // code for arrow down
-                    translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, 10, pixel_color(255, 0, 0));
-                    break;
-                case 'C':
-                    // code for arrow right
-                    translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 10, 0, pixel_color(255, 0, 0));
-                    break;
-                case 'D':
-                    // code for arrow left
-                    translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -10, 0, pixel_color(255, 0, 0));
-                    break;
-            }
-        }
-        if (input == 'e') {
-            ioctl(tty_fd,KDSETMODE,KD_TEXT);
-            return 0;
+        switch(input) {
+            case '\033': // if the first value is esc
+                getchar(); // skip the [
+                switch(getchar()) { // the real value
+                    case 'A':
+                        // code for arrow up
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, -10, pixel_color(255, 0, 0));
+                        break;
+                    case 'B':
+                        // code for arrow down
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, 10, pixel_color(255, 0, 0));
+                        break;
+                    case 'C':
+                        // code for arrow right
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 10, 0, pixel_color(255, 0, 0));
+                        break;
+                    case 'D':
+                        // code for arrow left
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -10, 0, pixel_color(255, 0, 0));
+                        break;
+                }
+                break;
+            case 'u': //scale up
+                scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 1.2, pixel_color(255, 0, 0));
+                break;
+            case 'i': //scale down
+                scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.8, pixel_color(255, 0, 0));
+                break;
+            case 'r': //rotate counter-clockwise
+                rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.04, pixel_color(255, 0, 0));
+                break;
+            case 't':
+                rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -0.04, pixel_color(255, 0, 0));
+                break;
+            case 'e':
+                // Unlock the screen from being re-rendered
+                ioctl(tty_fd,KDSETMODE,KD_TEXT);
+                return 0;
         }
         input = getchar();
     }
-    // Unlock the screen from being re-rendered
-    ioctl(tty_fd,KDSETMODE,KD_TEXT);
-    
 	return 0;
 }
 
@@ -159,19 +170,6 @@ void clear_screen(uint32_t color) {
     }
 }
 
-
-// void print_file(char* filename, int posx, int posy, uint32_t color) {
-//     FILE *file = fopen(filename, "r");
-    
-//     int x1, y1, x2, y2;
-//     fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
-
-//     while (!feof(file)) {
-//         print_line(x1, y1, x2, y2, color);
-//         fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
-//     } 
-// }
-
 void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter) {
     FILE *file = fopen(filename, "r");
     
@@ -180,15 +178,12 @@ void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides,
 
     while (!feof(file)) {
         polygon_save_sides[*iter] = n;
-        int arr_coordinate[n*2];
         for (int i = 0; (i < n) && !feof(file); i++) {
             fscanf(file, "%d,%d", &x, &y);
             polygon_save_points[*iter][i*2] = x;
             polygon_save_points[*iter][i*2+1] = y;
-            arr_coordinate[i*2] = x;
-            arr_coordinate[i*2+1] = y;
         }
-        // print_polygon(polygon_save_sides[*iter], polygon_save_points[*iter], color);
+        print_polygon(polygon_save_sides[*iter], polygon_save_points[*iter], color);
         fscanf(file, "%d", &n);
         *iter += 1;
     }
@@ -204,7 +199,7 @@ void print_file_circle(char* filename, uint32_t color, int (*circle_save_points)
         circle_save_points[*iter][0] = x0;
         circle_save_points[*iter][1] = y0;
         circle_save_points[*iter][2] = r;
-        // print_circle(x0, y0, r, color);
+        print_circle(x0, y0, r, color);
         fscanf(file, "%d,%d,%d", &x0, &y0, &r);
         *iter += 1;
     } 
@@ -352,13 +347,54 @@ void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
         for (int j = 0; j < polygon_save_sides[i]; j++) {
             polygon_save_points[i][j*2] += dx;
             polygon_save_points[i][j*2+1] += dy;
-            printf("%d, %d\n", polygon_save_points[i][j*2], polygon_save_points[i][j*2+1]);
         }
     }
 
     for (int i = 0; i < iter_circle; i++) {
         circle_save_points[i][0] += dx;
         circle_save_points[i][1] += dy;
+    }
+
+    clear_screen(pixel_color(0, 0, 0));
+    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
+    print_circle_save(circle_save_points, iter_circle, color);
+}
+
+void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float scale_factor, uint32_t color) {
+    for (int i = 0; i < iter_polygon; i++) {
+        for (int j = 0; j < polygon_save_sides[i]; j++) {
+            polygon_save_points[i][j*2] = (int) polygon_save_points[i][j*2] * scale_factor;
+            polygon_save_points[i][j*2+1] = (int) polygon_save_points[i][j*2+1] * scale_factor;
+        }
+    }
+
+    for (int i = 0; i < iter_circle; i++) {
+        circle_save_points[i][2] = (int) circle_save_points[i][2] * scale_factor;
+    }
+
+    clear_screen(pixel_color(0, 0, 0));
+    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
+    print_circle_save(circle_save_points, iter_circle, color);
+}
+
+void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float rot_degree, uint32_t color) {
+    double s = sin(rot_degree);
+    double c = cos(rot_degree);
+
+    for (int i = 0; i < iter_polygon; i++) {
+        for (int j = 0; j < polygon_save_sides[i]; j++) {
+            int tmp_x = (int) polygon_save_points[i][j*2] * c - polygon_save_points[i][j*2+1] * s;
+            int tmp_y = (int) polygon_save_points[i][j*2] * s + polygon_save_points[i][j*2+1] * c;
+            polygon_save_points[i][j*2] = tmp_x;
+            polygon_save_points[i][j*2+1] = tmp_y;
+        }
+    }
+
+    for (int i = 0; i < iter_circle; i++) {
+        int tmp_x = (int) circle_save_points[i][0] * c - circle_save_points[i][1] * s;
+        int tmp_y = (int) circle_save_points[i][0] * s + circle_save_points[i][1] * c;
+        circle_save_points[i][0] = (int) tmp_x;
+        circle_save_points[i][1] = (int) tmp_y;
     }
 
     clear_screen(pixel_color(0, 0, 0));
