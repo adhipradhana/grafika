@@ -52,6 +52,10 @@ void print_polygon_save(int* polygon_save_sides, int (*polygon_save_points)[1000
 
 void print_circle_save(int (*circle_save_points)[3], int iter, uint32_t color);
 
+void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int *iter_circle, int x, int y, int r, uint32_t color);
+
+void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int xi, int xf, uint32_t color);
+
 int main(int argc, char** argv) {
     // Get input (argv[1]) which containst list of pixel
     if (argc != 3) {
@@ -138,6 +142,13 @@ int main(int argc, char** argv) {
             case 't':
                 rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -0.04, pixel_color(255, 0, 0));
                 break;
+            case 'f':
+                make_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, &iter_circle, 400, 150, 12, pixel_color(255,0,0));
+                while (getchar() != 'g') {
+                    animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 400, 550, pixel_color(255,0,0));
+                }
+                iter_circle -= 1;
+                break;
             case 'e':
                 // Unlock the screen from being re-rendered
                 ioctl(tty_fd,KDSETMODE,KD_TEXT);
@@ -216,6 +227,10 @@ void print_polygon(int n, int* arr_coordinate, uint32_t color) {
     }
 }
 
+/*
+    Bresenham's Circle Algorithm
+    Referenced from: https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
+*/
 void print_circle(int x0, int y0, int r, uint32_t color) {
     int x = r-1;
     int y = 0;
@@ -413,3 +428,33 @@ void print_circle_save(int (*circle_save_points)[3], int iter, uint32_t color) {
         print_circle(circle_save_points[i][0], circle_save_points[i][1], circle_save_points[i][2], color);
     }
 }
+
+void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int *iter_circle, int x, int y, int r, uint32_t color) {
+    circle_save_points[*iter_circle][0] = x;
+    circle_save_points[*iter_circle][1] = y;
+    circle_save_points[*iter_circle][2] = r;
+    *iter_circle += 1;
+
+    clear_screen(pixel_color(0, 0, 0));
+    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
+    print_circle_save(circle_save_points, *iter_circle, color);
+}
+
+void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int xi, int xf, uint32_t color) {
+    int iteration = 1;
+    for (int i = xi; i <= xf; i += iteration) {
+        circle_save_points[iter_circle-1][0] += iteration;
+        clear_screen(pixel_color(0, 0, 0));
+        print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
+        print_circle_save(circle_save_points, iter_circle, color);
+    }
+
+    for (int i = xf; i >= xi; i -= iteration) {
+        circle_save_points[iter_circle-1][0] -= iteration;
+        clear_screen(pixel_color(0, 0, 0));
+        print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
+        print_circle_save(circle_save_points, iter_circle, color);
+    }
+
+}
+
