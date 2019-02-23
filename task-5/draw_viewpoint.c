@@ -28,10 +28,10 @@ int TOP = 8;    // 1000
 // Defining x_max, y_max and x_min, y_min for 
 // clipping rectangle. Since diagonal points are 
 // enough to define a rectangle 
-const int x_max = 10; 
-const int y_max = 8; 
-const int x_min = 4; 
-const int y_min = 4; 
+const int x_max = 200; 
+const int y_max = 200; 
+const int x_min = 0; 
+const int y_min = 0; 
 
 int compute_region_code(int x, int y);
 
@@ -79,8 +79,8 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
 
 int main(int argc, char** argv) {
     // Get input (argv[1]) which containst list of pixel
-    if (argc != 2) {
-        printf("params: <filename>\n");
+    if (argc != 4) {
+        printf("params: <filename x 3>\n");
         return 1;
     }
     
@@ -123,70 +123,70 @@ int main(int argc, char** argv) {
     // Unlock the screen from being re-rendered
     ioctl(tty_fd,KDSETMODE,KD_TEXT);
 
-    // //File saves
-    // int polygon_save_sides[1000];
-    // int polygon_save_points[1000][1000];
-    // int circle_save_points[1000][3];
-    // int iter_polygon = 0;
-    // int iter_circle = 0;
+    //File saves
+    int polygon_save_sides[1000];
+    int polygon_save_points[1000][1000];
+    int circle_save_points[1000][3];
+    int iter_polygon = 0;
+    int iter_circle = 0;
 
-    // // Render the screen to whole black
-    // clear_screen(pixel_color(0, 0, 0));
-    // // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
-    // print_file_polygon(argv[1], pixel_color(255, 0, 0), polygon_save_sides, polygon_save_points, &iter_polygon);
-    // print_file_circle(argv[2], pixel_color(255, 0, 0), circle_save_points, &iter_circle);
+    // Render the screen to whole black
+    clear_screen(pixel_color(0, 0, 0));
+    // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
+    print_file_polygon(argv[2], pixel_color(255, 0, 0), polygon_save_sides, polygon_save_points, &iter_polygon);
+    print_file_circle(argv[3], pixel_color(255, 0, 0), circle_save_points, &iter_circle);
 
-    // // Wait for input
-    // char input = getchar();
-    // while(1) {
-    //     switch(input) {
-    //         case '\033': // if the first value is esc
-    //             getchar(); // skip the [
-    //             switch(getchar()) { // the real value
-    //                 case 'A':
-    //                     // code for arrow up
-    //                     translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, -10, pixel_color(255, 0, 0));
-    //                     break;
-    //                 case 'B':
-    //                     // code for arrow down
-    //                     translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, 10, pixel_color(255, 0, 0));
-    //                     break;
-    //                 case 'C':
-    //                     // code for arrow right
-    //                     translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 10, 0, pixel_color(255, 0, 0));
-    //                     break;
-    //                 case 'D':
-    //                     // code for arrow left
-    //                     translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -10, 0, pixel_color(255, 0, 0));
-    //                     break;
-    //             }
-    //             break;
-    //         case 'u': //scale up
-    //             scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 1.2, pixel_color(255, 0, 0));
-    //             break;
-    //         case 'i': //scale down
-    //             scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.8, pixel_color(255, 0, 0));
-    //             break;
-    //         case 'r': //rotate counter-clockwise
-    //             rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.04, pixel_color(255, 0, 0));
-    //             break;
-    //         case 't':
-    //             rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -0.04, pixel_color(255, 0, 0));
-    //             break;
-    //         case 'f':
-    //             make_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, &iter_circle, 400, 150, 12, pixel_color(255,0,0));
-    //             while (getchar() != 'g') {
-    //                 animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 400, 550, pixel_color(255,0,0));
-    //             }
-    //             iter_circle -= 1;
-    //             break;
-    //         case 'e':
-    //             // Unlock the screen from being re-rendered
-    //             ioctl(tty_fd,KDSETMODE,KD_TEXT);
-    //             return 0;
-    //     }
-    //     input = getchar();
-    // }
+    // Wait for input
+    char input = getchar();
+    while(1) {
+        switch(input) {
+            case '\033': // if the first value is esc
+                getchar(); // skip the [
+                switch(getchar()) { // the real value
+                    case 'A':
+                        // code for arrow up
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, -10, pixel_color(255, 0, 0));
+                        break;
+                    case 'B':
+                        // code for arrow down
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, 10, pixel_color(255, 0, 0));
+                        break;
+                    case 'C':
+                        // code for arrow right
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 10, 0, pixel_color(255, 0, 0));
+                        break;
+                    case 'D':
+                        // code for arrow left
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -10, 0, pixel_color(255, 0, 0));
+                        break;
+                }
+                break;
+            case 'u': //scale up
+                scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 1.2, pixel_color(255, 0, 0));
+                break;
+            case 'i': //scale down
+                scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.8, pixel_color(255, 0, 0));
+                break;
+            case 'r': //rotate counter-clockwise
+                rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.04, pixel_color(255, 0, 0));
+                break;
+            case 't':
+                rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -0.04, pixel_color(255, 0, 0));
+                break;
+            case 'f':
+                make_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, &iter_circle, 400, 150, 12, pixel_color(255,0,0));
+                while (getchar() != 'g') {
+                    animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 400, 550, pixel_color(255,0,0));
+                }
+                iter_circle -= 1;
+                break;
+            case 'e':
+                // Unlock the screen from being re-rendered
+                ioctl(tty_fd,KDSETMODE,KD_TEXT);
+                return 0;
+        }
+        input = getchar();
+    }
 	return 0;
 }
 
@@ -250,11 +250,11 @@ void print_file_circle(char* filename, uint32_t color, int (*circle_save_points)
 void print_polygon(int n, int* arr_coordinate, uint32_t color) {
     int i = 0;
     while (i < (n*2)-2) {
-        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
+        cohen_sutherland_clip(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
         i += 2;
     }
     if (n > 1) {
-        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
+        cohen_sutherland_clip(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
     }
 }
 
