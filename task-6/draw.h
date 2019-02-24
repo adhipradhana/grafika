@@ -136,4 +136,14 @@ int compute_region_code(int x, int y);
 */
 void cohen_sutherland_clip(int x1, int y1, int x2, int y2, uint32_t color);
 
+/*
+    Flood fill color
+*/
+void flood_fill(int x, int y, uint32_t old_color, uint32_t new_color);
+
+/*
+    Check color
+*/
+int is_color_same(int x, int y, uint32_t color);
+
 #endif

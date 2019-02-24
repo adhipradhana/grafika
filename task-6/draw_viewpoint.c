@@ -2,8 +2,8 @@
 
 int main(int argc, char** argv) {
     // Get input (argv[1]) which containst list of pixel
-    if (argc != 4) {
-        printf("params: <filename x 3>\n");
+    if (argc != 3) {
+        printf("params: <filename x 2>\n");
         return 1;
     }
     
@@ -36,16 +36,6 @@ int main(int argc, char** argv) {
      */
 	fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
 
-    // Render the screen to whole black
-    clear_screen(pixel_color(0, 0, 0));
-    // Print image from input (argv[1] which contains list of pixel location) all white
-    print_file_line(argv[1], 0, 0, pixel_color(255, 0, 0));
-
-    // Wait for input
-    getchar();
-    // Unlock the screen from being re-rendered
-    ioctl(tty_fd,KDSETMODE,KD_TEXT);
-
     //File saves
     int polygon_save_sides[1000];
     int polygon_save_points[1000][1000];
@@ -56,8 +46,8 @@ int main(int argc, char** argv) {
     // Render the screen to whole black
     clear_screen(pixel_color(0, 0, 0));
     // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
-    print_file_polygon(argv[2], pixel_color(255, 0, 0), polygon_save_sides, polygon_save_points, &iter_polygon);
-    print_file_circle(argv[3], pixel_color(255, 0, 0), circle_save_points, &iter_circle);
+    print_file_polygon(argv[1], pixel_color(255, 0, 0), polygon_save_sides, polygon_save_points, &iter_polygon);
+    print_file_circle(argv[2], pixel_color(255, 0, 0), circle_save_points, &iter_circle);
 
     // Wait for input
     char input = getchar();

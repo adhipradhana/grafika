@@ -1,4 +1,5 @@
 #include "draw.h"
+#include "queue.h"
 
 /* 
     Global variables
@@ -486,6 +487,66 @@ void cohen_sutherland_clip(int x1, int y1, int x2, int y2, uint32_t color) {
     } 
     if (accept) { 
         print_line(x1, y1, x2, y2, color);
+    }
+}
+
+/*
+    Task 6
+*/
+int is_color_same(int x, int y, uint32_t color) {
+    long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
+    return *((uint32_t*)(fbp + location)) == color;
+}
+
+/*
+    Task 6
+*/
+int is_out_of_bound(int x, int y) {
+    return (x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0);
+}
+
+/*
+    Task 6
+*/
+void flood_fill(int x, int y, uint32_t target_color, uint32_t replacement_color) {
+    // create empty queue
+    struct Queue q = *createQueue();
+
+    // check if out of bound
+    if (is_out_of_bound(x, y)) 
+        return;
+
+    // check if color is same
+    if (!is_color_same(x, y, target_color)) 
+        return;
+    
+    // enqueue node into queue
+    enQueue(&q, x, y);
+
+    // loop
+    while (q.front != NULL) {
+        struct QNode node = *deQueue(&q);
+        print_point(node.x, node.y, replacement_color);
+
+        // check north
+        if ((!is_out_of_bound(x, y + 1)) && (!is_color_same(x, y + 1, replacement_color))) {
+            enQueue(&q, x, y + 1);
+        }
+
+        // check south
+        if ((!is_out_of_bound(x, y - 1)) && (!is_color_same(x, y - 1, replacement_color))) {
+            enQueue(&q, x, y - 1);
+        }
+
+        // check west
+        if ((!is_out_of_bound(x - 1, y)) && (!is_color_same(x - 1, y, replacement_color))) {
+            enQueue(&q, x - 1, y);
+        }
+
+        // check east
+        if ((!is_out_of_bound(x + 1, y)) && (!is_color_same(x + 1, y, replacement_color))) {
+            enQueue(&q, x + 1, y);
+        }
     }
 }
 
