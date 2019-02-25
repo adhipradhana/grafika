@@ -24,7 +24,7 @@ void enQueue(struct Queue *q, int x, int y) {
     // If queue is empty, then new node is front and rear both 
     if (q->rear == NULL) 
     { 
-       q->rear = temp; 
+       q->front = q->rear = temp;  
        return; 
     } 
   

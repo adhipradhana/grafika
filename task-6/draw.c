@@ -221,6 +221,8 @@ void print_circle(int x0, int y0, int r, uint32_t color) {
             err += dx - (r << 1);
         }
     }
+
+    flood_fill(x0, y0, pixel_color(0, 0, 0), pixel_color(255, 0, 0));
 }
 
 /*
@@ -510,43 +512,90 @@ int is_out_of_bound(int x, int y) {
 */
 void flood_fill(int x, int y, uint32_t target_color, uint32_t replacement_color) {
     // create empty queue
-    struct Queue q = *createQueue();
+    struct Queue* q = createQueue();
+    int visited[10000][10000];
+    memset(visited, 0, sizeof(visited));
 
     // check if out of bound
     if (is_out_of_bound(x, y)) 
         return;
 
-    // check if color is same
-    if (!is_color_same(x, y, target_color)) 
-        return;
+    // // check if color is same
+    // if (!is_color_same(x, y, target_color)) 
+    //     return;
     
     // enqueue node into queue
-    enQueue(&q, x, y);
+    enQueue(q, x, y);
+
+    if (q->front == NULL) {
+        print_line(0, 0, 100, 100, pixel_color(255, 0, 0));
+    }
 
     // loop
-    while (q.front != NULL) {
-        struct QNode node = *deQueue(&q);
+    while (q->front != NULL) {
+        struct QNode node = *deQueue(q);
         print_point(node.x, node.y, replacement_color);
+        x = node.x;
+        y = node.y;
+        visited[x][y] = 1;
 
         // check north
-        if ((!is_out_of_bound(x, y + 1)) && (!is_color_same(x, y + 1, replacement_color))) {
-            enQueue(&q, x, y + 1);
-        }
+        if ((!is_out_of_bound(x, y + 1)) && (!is_color_same(x, y + 1, replacement_color)) && !visited[x][y + 1]) {
+            enQueue(q, x, y + 1);
+        } 
 
         // check south
-        if ((!is_out_of_bound(x, y - 1)) && (!is_color_same(x, y - 1, replacement_color))) {
-            enQueue(&q, x, y - 1);
+        if ((!is_out_of_bound(x, y - 1)) && (!is_color_same(x, y - 1, replacement_color)) && !visited[x][y - 1]) {
+            enQueue(q, x, y - 1);
         }
 
         // check west
-        if ((!is_out_of_bound(x - 1, y)) && (!is_color_same(x - 1, y, replacement_color))) {
-            enQueue(&q, x - 1, y);
+        if ((!is_out_of_bound(x - 1, y)) && (!is_color_same(x - 1, y, replacement_color)) && !visited[x - 1][y]) {
+            enQueue(q, x - 1, y);
         }
 
         // check east
-        if ((!is_out_of_bound(x + 1, y)) && (!is_color_same(x + 1, y, replacement_color))) {
-            enQueue(&q, x + 1, y);
+        if ((!is_out_of_bound(x + 1, y)) && (!is_color_same(x + 1, y, replacement_color)) && !visited[x + 1][y]) {
+            enQueue(q, x + 1, y);
         }
     }
 }
+
+// /*
+//     Task 6
+// */
+// int* compute_centroid(int* vertices, int vertexCount) {
+//     int centroid_x = 0;
+//     int centroid_y = 0;
+    
+//     double signedArea = 0.0;
+//     double x0 = 0.0; // Current vertex X
+//     double y0 = 0.0; // Current vertex Y
+//     double x1 = 0.0; // Next vertex X
+//     double y1 = 0.0; // Next vertex Y
+//     double a = 0.0;  // Partial signed area
+
+//     // For all vertices
+//     int i = 0;
+//     for (i = 0; i < vertexCount; i += 2) {
+//         x0 = vertices[i];
+//         y0 = vertices[i + 1];
+//         x1 = vertices[i + 2];
+//         y1 = vertices[i + 3];
+//         a = x0 * y1 - x1 * y0;
+//         signedArea += a;
+//         centroid_x += (x0 + x1)*a;
+//         centroid_y += (y0 + y1)*a;
+//     }
+
+//     signedArea *= 0.5;
+//     centroid_x /= (6.0*signedArea);
+//     centroid_x /= (6.0*signedArea);
+
+//     int centroid[2];
+//     centroid[0] = centroid_x;
+//     centroid[1] = centroid_y;
+
+//     return centroid;
+// }
 

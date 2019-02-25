@@ -146,4 +146,14 @@ void flood_fill(int x, int y, uint32_t old_color, uint32_t new_color);
 */
 int is_color_same(int x, int y, uint32_t color);
 
+/*
+    Check out of bound
+*/
+int is_out_of_bound(int x, int y);
+
+/*
+    Find centroid
+*/
+int* compute_centroid(int* vertices, int vertexCount);
+
 #endif
