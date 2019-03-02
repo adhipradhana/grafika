@@ -222,7 +222,7 @@ void print_circle(int x0, int y0, int r, uint32_t color) {
         }
     }
 
-    flood_fill(x0, y0, pixel_color(0, 0, 0), pixel_color(255, 0, 0));
+    flood_fill(x0, y0, pixel_color(255, 0, 0));
 }
 
 /*
@@ -507,56 +507,59 @@ int is_out_of_bound(int x, int y) {
     return (x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0);
 }
 
+void debug() {
+    print_line(0, 0, 100, 100, pixel_color(0, 255, 0));
+}
+
 /*
     Task 6
 */
-void flood_fill(int x, int y, uint32_t target_color, uint32_t replacement_color) {
-    // create empty queue
-    struct Queue* q = createQueue();
-    int visited[10000][10000];
-    memset(visited, 0, sizeof(visited));
-
+void flood_fill(int x, int y, uint32_t replacement_color) {
     // check if out of bound
     if (is_out_of_bound(x, y)) 
         return;
 
     // // check if color is same
-    // if (!is_color_same(x, y, target_color)) 
-    //     return;
+    if (is_color_same(x, y, replacement_color)) {
+        print_point(x, y, replacement_color); 
+        return;
+    }
     
+    // create empty queue
+    struct Queue* q = createQueue();
+
     // enqueue node into queue
     enQueue(q, x, y);
-
-    if (q->front == NULL) {
-        print_line(0, 0, 100, 100, pixel_color(255, 0, 0));
-    }
 
     // loop
     while (q->front != NULL) {
         struct QNode node = *deQueue(q);
-        print_point(node.x, node.y, replacement_color);
-        x = node.x;
-        y = node.y;
-        visited[x][y] = 1;
+        struct QNode e = *newNode(node.x, node.y);
+        struct QNode w = *newNode(node.x, node.y);
 
-        // check north
-        if ((!is_out_of_bound(x, y + 1)) && (!is_color_same(x, y + 1, replacement_color)) && !visited[x][y + 1]) {
-            enQueue(q, x, y + 1);
-        } 
-
-        // check south
-        if ((!is_out_of_bound(x, y - 1)) && (!is_color_same(x, y - 1, replacement_color)) && !visited[x][y - 1]) {
-            enQueue(q, x, y - 1);
+        // go to east
+        while (!is_color_same(e.x, e.y, replacement_color) && !is_out_of_bound(e.x, e.y)) {
+            e.x++;
         }
 
-        // check west
-        if ((!is_out_of_bound(x - 1, y)) && (!is_color_same(x - 1, y, replacement_color)) && !visited[x - 1][y]) {
-            enQueue(q, x - 1, y);
+        // go to west
+        while (!is_color_same(w.x, w.y, replacement_color) && !is_out_of_bound(w.x, w.y)) {
+            w.x--;
         }
 
-        // check east
-        if ((!is_out_of_bound(x + 1, y)) && (!is_color_same(x + 1, y, replacement_color)) && !visited[x + 1][y]) {
-            enQueue(q, x + 1, y);
+        int y_temp = node.y;
+        for (int x_temp = w.x + 1; x_temp < e.x; x_temp++) {
+            print_point(x_temp, node.y, replacement_color);
+
+            // check north
+            if (!is_color_same(x_temp, y_temp + 1, replacement_color)) {
+                enQueue(q, x_temp, y_temp + 1);
+            }
+
+            // check south
+            if (!is_color_same(x_temp, y_temp - 1, replacement_color)) {
+                enQueue(q, x_temp, y_temp - 1);
+            }
         }
     }
 }
