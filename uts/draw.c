@@ -181,6 +181,10 @@ void print_polygon(int n, int* arr_coordinate, uint32_t color) {
     if (n > 1) {
         print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
     }
+
+    int* centroid = compute_centroid(arr_coordinate, n);
+
+    flood_fill(centroid[0], centroid[1], pixel_color(255, 0, 0));
 }
 
 /*
@@ -567,38 +571,38 @@ void flood_fill(int x, int y, uint32_t replacement_color) {
 // /*
 //     Task 6
 // */
-// int* compute_centroid(int* vertices, int vertexCount) {
-//     int centroid_x = 0;
-//     int centroid_y = 0;
+int* compute_centroid(int* vertices, int vertexCount) {
+    int centroid_x = 0;
+    int centroid_y = 0;
     
-//     double signedArea = 0.0;
-//     double x0 = 0.0; // Current vertex X
-//     double y0 = 0.0; // Current vertex Y
-//     double x1 = 0.0; // Next vertex X
-//     double y1 = 0.0; // Next vertex Y
-//     double a = 0.0;  // Partial signed area
+    double signedArea = 0.0;
+    double x0 = 0.0; // Current vertex X
+    double y0 = 0.0; // Current vertex Y
+    double x1 = 0.0; // Next vertex X
+    double y1 = 0.0; // Next vertex Y
+    double a = 0.0;  // Partial signed area
 
-//     // For all vertices
-//     int i = 0;
-//     for (i = 0; i < vertexCount; i += 2) {
-//         x0 = vertices[i];
-//         y0 = vertices[i + 1];
-//         x1 = vertices[i + 2];
-//         y1 = vertices[i + 3];
-//         a = x0 * y1 - x1 * y0;
-//         signedArea += a;
-//         centroid_x += (x0 + x1)*a;
-//         centroid_y += (y0 + y1)*a;
-//     }
+    // For all vertices
+    int i;
+    for (i = 0; i < (vertexCount * 2) - 2; i += 2) {
+        x0 = vertices[i];
+        y0 = vertices[i + 1];
+        x1 = vertices[i + 2];
+        y1 = vertices[i + 3];
+        a = x0 * y1 - x1 * y0;
+        signedArea += a;
+        centroid_x += (x0 + x1)*a;
+        centroid_y += (y0 + y1)*a;
+    }
 
-//     signedArea *= 0.5;
-//     centroid_x /= (6.0*signedArea);
-//     centroid_x /= (6.0*signedArea);
+    signedArea *= 0.5;
+    centroid_x /= (6.0*signedArea);
+    centroid_y /= (6.0*signedArea);
 
-//     int centroid[2];
-//     centroid[0] = centroid_x;
-//     centroid[1] = centroid_y;
+    int* centroid = (int*) malloc(2 * sizeof(int*));
+    centroid[0] = centroid_x;
+    centroid[1] = centroid_y;
 
-//     return centroid;
-// }
+    return centroid;
+}
 
