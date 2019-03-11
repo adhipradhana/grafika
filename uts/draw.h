@@ -84,12 +84,12 @@ void print_circle(int x0, int y0, int r, uint32_t color);
 /*
     Displaying polygon from given file
 */
-void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter);
+void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter);
 
 /*
     Displaying circle from given file
 */
-void print_file_circle(char* filename, uint32_t color, int (*circle_save_points)[3], int* iter);
+void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter);
 
 /*
     Displaying polygon from previous saved points

@@ -1,5 +1,6 @@
 #include "draw.h"
 #include "queue.h"
+#include "color.h"
 
 /* 
     Global variables
@@ -12,8 +13,8 @@ int BOTTOM = 4; // 0100
 int TOP = 8;    // 1000 
 
 // Viewport area declaration
-const int x_max = 200; 
-const int y_max = 200; 
+const int x_max = 1000; 
+const int y_max = 1000; 
 const int x_min = 0; 
 const int y_min = 0; 
 
@@ -232,11 +233,11 @@ void print_circle(int x0, int y0, int r, uint32_t color) {
 /*
     Task 3
 */
-void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter) {
+void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter) {
     FILE *file = fopen(filename, "r");
     
-    int n, x, y;
-    fscanf(file, "%d", &n);
+    int n, x, y, color_code;
+    fscanf(file, "%d,%d", &n, &color_code);
 
     while (!feof(file)) {
         polygon_save_sides[*iter] = n;
@@ -245,8 +246,8 @@ void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides,
             polygon_save_points[*iter][i*2] = x;
             polygon_save_points[*iter][i*2+1] = y;
         }
-        print_polygon(polygon_save_sides[*iter], polygon_save_points[*iter], color);
-        fscanf(file, "%d", &n);
+        print_polygon(polygon_save_sides[*iter], polygon_save_points[*iter], convertColorFromCode(color_code));
+        fscanf(file, "%d,%d", &n, &color_code);
         *iter += 1;
     }
 }
@@ -254,18 +255,18 @@ void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides,
 /*
     Task 3
 */
-void print_file_circle(char* filename, uint32_t color, int (*circle_save_points)[3], int* iter) {
+void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter) {
     FILE *file = fopen(filename, "r");
     
-    int x0, y0, r;
-    fscanf(file, "%d,%d,%d", &x0, &y0, &r);
+    int x0, y0, r, color_code;
+    fscanf(file, "%d,%d,%d,%d", &x0, &y0, &r, &color_code);
 
     while (!feof(file)) {
         circle_save_points[*iter][0] = x0;
         circle_save_points[*iter][1] = y0;
         circle_save_points[*iter][2] = r;
-        print_circle(x0, y0, r, color);
-        fscanf(file, "%d,%d,%d", &x0, &y0, &r);
+        print_circle(x0, y0, r, convertColorFromCode(color_code));
+        fscanf(file, "%d,%d,%d,%d", &x0, &y0, &r, &color_code);
         *iter += 1;
     } 
 }

@@ -17,10 +17,15 @@ void handle_menu();
 void handle_transformation();
 
 int main(int argc, char** argv) {
+<<<<<<< HEAD
     char *poly_file_name = "war_poly.txt";
     char *circle_file_name = "war_circle.txt";
     char *bitmap_file_name = "names.txt";
     char *lines_file_name = "lines.txt";
+=======
+    char *poly_file_name = "../image/poly.txt";
+    char *circle_file_name = "../image/circle.txt";
+>>>>>>> 7bb066a958912eddd3969032509706d3fa775ad4
     
     // Lock the screen from being re-rendered
     tty_fd = open("/dev/tty0", O_RDWR);
@@ -53,6 +58,7 @@ int main(int argc, char** argv) {
 
     // Render the screen to whole black
     clear_screen(pixel_color(0, 0, 0));
+<<<<<<< HEAD
     print_line(0, 0, 100, 100, pixel_color(255, 0, 0));
     
     // Print menu screen
@@ -60,6 +66,11 @@ int main(int argc, char** argv) {
     
 	return 0;
 }
+=======
+    // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
+    print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, &iter_polygon);
+    print_file_circle(circle_file_name, circle_save_points, &iter_circle);
+>>>>>>> 7bb066a958912eddd3969032509706d3fa775ad4
 
 void handle_menu() {
     // Wait for input
