@@ -1,4 +1,5 @@
 #include "draw.h"
+#include "color.h"
 
 int main(int argc, char** argv) {
     char *poly_file_name = "war_poly.txt";
@@ -43,8 +44,8 @@ int main(int argc, char** argv) {
     // Render the screen to whole black
     clear_screen(pixel_color(0, 0, 0));
     // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
-    print_file_polygon(poly_file_name, pixel_color(255, 0, 0), polygon_save_sides, polygon_save_points, &iter_polygon);
-    print_file_circle(circle_file_name, pixel_color(0, 255, 0), circle_save_points, &iter_circle);
+    print_file_polygon(poly_file_name, COLOR_WHITE, polygon_save_sides, polygon_save_points, &iter_polygon);
+    print_file_circle(circle_file_name, COLOR_MAGENTA, circle_save_points, &iter_circle);
 
     // Wait for input
     char input = getchar();

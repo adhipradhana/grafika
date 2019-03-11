@@ -1,5 +1,6 @@
 #include "draw.h"
 #include "queue.h"
+#include "color.h"
 
 /* 
     Global variables
