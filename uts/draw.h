@@ -84,47 +84,47 @@ void print_circle(int x0, int y0, int r, uint32_t color);
 /*
     Displaying polygon from given file
 */
-void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter);
+void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_save_points)[1000], int* polygon_save_color, int* iter);
 
 /*
     Displaying circle from given file
 */
-void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter);
+void print_file_circle(char* filename, int (*circle_save_points)[3], int* circle_save_color, int* iter);
 
 /*
     Displaying polygon from previous saved points
 */
-void print_polygon_save(int* polygon_save_sides, int (*polygon_save_points)[1000], int iter, uint32_t color);
+void print_polygon_save(int* polygon_save_sides, int (*polygon_save_points)[1000], int* polygon_save_color, int iter);
 
 /*
     Displaying circle from previous saved points
 */
-void print_circle_save(int (*circle_save_points)[3], int iter, uint32_t color);
+void print_circle_save(int (*circle_save_points)[3], int* circle_save_color, int iter);
 
 /*
     Translate the images
 */
-void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int dx, int dy, uint32_t color);
+void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int dx, int dy);
 
 /*
     Scale the images
 */
-void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float scale_factor, uint32_t color);
+void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, float scale_factor);
 
 /*
     Rotates the images
 */
-void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float rot_degree, uint32_t color);
+void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, float rot_degree);
 
 /*
     Create a bullet (for animation)
 */
-void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int *iter_circle, int x, int y, int r, uint32_t color);
+void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int *iter_circle, int x, int y, int r, uint32_t color);
 
 /*
     Animate the buller (animation)
 */
-void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int xi, int xf, uint32_t color);
+void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int xi, int xf, uint32_t color);
 
 /*
     Returning region codes for cohen sutherland algorithm

@@ -233,7 +233,7 @@ void print_circle(int x0, int y0, int r, uint32_t color) {
 /*
     Task 3
 */
-void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter) {
+void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_save_points)[1000], int* polygon_save_color, int* iter) {
     FILE *file = fopen(filename, "r");
     
     int n, x, y, color_code;
@@ -241,6 +241,7 @@ void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_s
 
     while (!feof(file)) {
         polygon_save_sides[*iter] = n;
+        polygon_save_color[*iter] = color_code;
         for (int i = 0; (i < n) && !feof(file); i++) {
             fscanf(file, "%d,%d", &x, &y);
             polygon_save_points[*iter][i*2] = x;
@@ -255,7 +256,7 @@ void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_s
 /*
     Task 3
 */
-void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter) {
+void print_file_circle(char* filename, int (*circle_save_points)[3], int* circle_save_color, int* iter) {
     FILE *file = fopen(filename, "r");
     
     int x0, y0, r, color_code;
@@ -265,6 +266,7 @@ void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter) 
         circle_save_points[*iter][0] = x0;
         circle_save_points[*iter][1] = y0;
         circle_save_points[*iter][2] = r;
+        circle_save_color[*iter] = color_code;
         print_circle(x0, y0, r, convertColorFromCode(color_code));
         fscanf(file, "%d,%d,%d,%d", &x0, &y0, &r, &color_code);
         *iter += 1;
@@ -274,25 +276,25 @@ void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter) 
 /*
     Task 3
 */
-void print_polygon_save(int* polygon_save_sides, int (*polygon_save_points)[1000], int iter, uint32_t color) {
+void print_polygon_save(int* polygon_save_sides, int (*polygon_save_points)[1000], int* polygon_save_color, int iter) {
     for (int i = 0; i < iter; i++) {
-        print_polygon(polygon_save_sides[i], polygon_save_points[i], color);
+        print_polygon(polygon_save_sides[i], polygon_save_points[i], convertColorFromCode(polygon_save_color[i]));
     }
 }
 
 /*
     Task 3
 */
-void print_circle_save(int (*circle_save_points)[3], int iter, uint32_t color) {
+void print_circle_save(int (*circle_save_points)[3], int* circle_save_color, int iter) {
     for (int i = 0; i < iter; i++) {
-        print_circle(circle_save_points[i][0], circle_save_points[i][1], circle_save_points[i][2], color);
+        print_circle(circle_save_points[i][0], circle_save_points[i][1], circle_save_points[i][2], convertColorFromCode(circle_save_color[i]));
     }
 }
 
 /*
     Task 4
 */
-void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int dx, int dy, uint32_t color) {
+void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int dx, int dy) {
     for (int i = 0; i < iter_polygon; i++) {
         for (int j = 0; j < polygon_save_sides[i]; j++) {
             polygon_save_points[i][j*2] += dx;
@@ -306,14 +308,14 @@ void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
     }
 
     clear_screen(pixel_color(0, 0, 0));
-    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
-    print_circle_save(circle_save_points, iter_circle, color);
+    print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon);
+    print_circle_save(circle_save_points, circle_save_color, iter_circle);
 }
 
 /*
     Task 4
 */
-void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float scale_factor, uint32_t color) {
+void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, float scale_factor) {
     for (int i = 0; i < iter_polygon; i++) {
         for (int j = 0; j < polygon_save_sides[i]; j++) {
             polygon_save_points[i][j*2] = (int) polygon_save_points[i][j*2] * scale_factor;
@@ -326,14 +328,14 @@ void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circ
     }
 
     clear_screen(pixel_color(0, 0, 0));
-    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
-    print_circle_save(circle_save_points, iter_circle, color);
+    print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon);
+    print_circle_save(circle_save_points, circle_save_color, iter_circle);
 }
 
 /*
     Task 4
 */
-void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, float rot_degree, uint32_t color) {
+void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, float rot_degree) {
     double s = sin(rot_degree);
     double c = cos(rot_degree);
 
@@ -354,41 +356,41 @@ void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*cir
     }
 
     clear_screen(pixel_color(0, 0, 0));
-    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
-    print_circle_save(circle_save_points, iter_circle, color);
+    print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon);
+    print_circle_save(circle_save_points, circle_save_color, iter_circle);
 }
 
 /*
     Task 5
 */
-void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int *iter_circle, int x, int y, int r, uint32_t color) {
+void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int *iter_circle, int x, int y, int r, uint32_t color) {
     circle_save_points[*iter_circle][0] = x;
     circle_save_points[*iter_circle][1] = y;
     circle_save_points[*iter_circle][2] = r;
     *iter_circle += 1;
 
     clear_screen(pixel_color(0, 0, 0));
-    print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
-    print_circle_save(circle_save_points, *iter_circle, color);
+    print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon);
+    print_circle_save(circle_save_points, circle_save_color, *iter_circle);
 }
 
 /*
     Task 5
 */
-void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int xi, int xf, uint32_t color) {
+void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int xi, int xf, uint32_t color) {
     int iteration = 1;
     for (int i = xi; i <= xf; i += iteration) {
         circle_save_points[iter_circle-1][0] += iteration;
         clear_screen(pixel_color(0, 0, 0));
-        print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
-        print_circle_save(circle_save_points, iter_circle, color);
+        print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon);
+        print_circle_save(circle_save_points, circle_save_color, iter_circle);
     }
 
     for (int i = xf; i >= xi; i -= iteration) {
         circle_save_points[iter_circle-1][0] -= iteration;
         clear_screen(pixel_color(0, 0, 0));
-        print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
-        print_circle_save(circle_save_points, iter_circle, color);
+        print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon);
+        print_circle_save(circle_save_points, circle_save_color, iter_circle);
     }
 
 }
