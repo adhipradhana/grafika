@@ -1,5 +1,6 @@
 #include "draw.h"
 #include "queue.h"
+#include "color.h"
 
 /* 
     Global variables
@@ -12,8 +13,8 @@ int BOTTOM = 4; // 0100
 int TOP = 8;    // 1000 
 
 // Viewport area declaration
-const int x_max = 200; 
-const int y_max = 200; 
+const int x_max = 1000; 
+const int y_max = 1000; 
 const int x_min = 0; 
 const int y_min = 0; 
 
@@ -254,18 +255,18 @@ void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_s
 /*
     Task 3
 */
-void print_file_circle(char* filename, uint32_t color, int (*circle_save_points)[3], int* iter) {
+void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter) {
     FILE *file = fopen(filename, "r");
     
-    int x0, y0, r;
-    fscanf(file, "%d,%d,%d", &x0, &y0, &r);
+    int x0, y0, r, color_code;
+    fscanf(file, "%d,%d,%d,%d", &x0, &y0, &r, &color_code);
 
     while (!feof(file)) {
         circle_save_points[*iter][0] = x0;
         circle_save_points[*iter][1] = y0;
         circle_save_points[*iter][2] = r;
-        print_circle(x0, y0, r, color);
-        fscanf(file, "%d,%d,%d", &x0, &y0, &r);
+        print_circle(x0, y0, r, convertColorFromCode(color_code));
+        fscanf(file, "%d,%d,%d,%d", &x0, &y0, &r, &color_code);
         *iter += 1;
     } 
 }
