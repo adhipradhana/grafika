@@ -511,7 +511,7 @@ int is_color_same(int x, int y, uint32_t color) {
     Task 6
 */
 int is_out_of_bound(int x, int y) {
-    return (x >= x_max || y >= y_max || x < 0 || y < 0);
+    return (x >= x_max || y >= y_max || x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0);
 }
 
 void debug() {
