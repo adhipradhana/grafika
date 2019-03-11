@@ -232,11 +232,11 @@ void print_circle(int x0, int y0, int r, uint32_t color) {
 /*
     Task 3
 */
-void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter) {
+void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_save_points)[1000], int* iter) {
     FILE *file = fopen(filename, "r");
     
-    int n, x, y;
-    fscanf(file, "%d", &n);
+    int n, x, y, color_code;
+    fscanf(file, "%d,%d", &n, &color_code);
 
     while (!feof(file)) {
         polygon_save_sides[*iter] = n;
@@ -245,8 +245,8 @@ void print_file_polygon(char* filename, uint32_t color, int* polygon_save_sides,
             polygon_save_points[*iter][i*2] = x;
             polygon_save_points[*iter][i*2+1] = y;
         }
-        print_polygon(polygon_save_sides[*iter], polygon_save_points[*iter], color);
-        fscanf(file, "%d", &n);
+        print_polygon(polygon_save_sides[*iter], polygon_save_points[*iter], convertColorFromCode(color_code));
+        fscanf(file, "%d,%d", &n, &color_code);
         *iter += 1;
     }
 }
