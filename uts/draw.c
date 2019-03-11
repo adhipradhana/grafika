@@ -306,6 +306,11 @@ void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
     }
 
     clear_screen(pixel_color(0, 0, 0));
+    // Print Rectangle at the end of viewpoint    
+    print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+    print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+    print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+    print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
     print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
     print_circle_save(circle_save_points, iter_circle, color);
 }
@@ -326,6 +331,11 @@ void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circ
     }
 
     clear_screen(pixel_color(0, 0, 0));
+    // Print Rectangle at the end of viewpoint    
+    print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+    print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+    print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+    print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
     print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
     print_circle_save(circle_save_points, iter_circle, color);
 }
@@ -354,6 +364,11 @@ void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*cir
     }
 
     clear_screen(pixel_color(0, 0, 0));
+    // Print Rectangle at the end of viewpoint    
+    print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+    print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+    print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+    print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
     print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
     print_circle_save(circle_save_points, iter_circle, color);
 }
@@ -368,6 +383,11 @@ void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
     *iter_circle += 1;
 
     clear_screen(pixel_color(0, 0, 0));
+    // Print Rectangle at the end of viewpoint    
+    print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+    print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+    print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+    print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
     print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
     print_circle_save(circle_save_points, *iter_circle, color);
 }
@@ -380,6 +400,11 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
     for (int i = xi; i <= xf; i += iteration) {
         circle_save_points[iter_circle-1][0] += iteration;
         clear_screen(pixel_color(0, 0, 0));
+        // Print Rectangle at the end of viewpoint    
+        print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+        print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+        print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+        print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
         print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
         print_circle_save(circle_save_points, iter_circle, color);
     }
@@ -387,6 +412,11 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
     for (int i = xf; i >= xi; i -= iteration) {
         circle_save_points[iter_circle-1][0] -= iteration;
         clear_screen(pixel_color(0, 0, 0));
+        // Print Rectangle at the end of viewpoint    
+        print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+        print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+        print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+        print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
         print_polygon_save(polygon_save_sides, polygon_save_points, iter_polygon, color);
         print_circle_save(circle_save_points, iter_circle, color);
     }

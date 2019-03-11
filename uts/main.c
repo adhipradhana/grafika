@@ -43,6 +43,11 @@ int main(int argc, char** argv) {
 
     // Render the screen to whole black
     clear_screen(pixel_color(0, 0, 0));
+    // Print Rectangle at the end of viewpoint    
+    print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+    print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+    print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+    print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
     // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
     print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, &iter_polygon);
     print_file_circle(circle_file_name, circle_save_points, &iter_circle);
