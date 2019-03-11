@@ -358,7 +358,7 @@ void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*cir
 }
 
 /*
-    Task 5
+    Task 4
 */
 void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int *iter_circle, int x, int y, int r, uint32_t color) {
     circle_save_points[*iter_circle][0] = x;
@@ -372,7 +372,7 @@ void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
 }
 
 /*
-    Task 5
+    Task 4
 */
 void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int iter_polygon, int iter_circle, int xi, int xf, uint32_t color) {
     int iteration = 1;
@@ -393,7 +393,7 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
 }
 
 /*
-    Task 6
+    Task 5
 */
 int compute_region_code(int x, int y) { 
     // initialized as being inside  
@@ -412,7 +412,7 @@ int compute_region_code(int x, int y) {
 } 
 
 /*
-    Task 6
+    Task 5
 */
 void cohen_sutherland_clip(int x1, int y1, int x2, int y2, uint32_t color) {
     // Compute region codes for P1, P2 
