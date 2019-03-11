@@ -377,7 +377,7 @@ void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
 /*
     Task 5
 */
-void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int xi, int xf, uint32_t color) {
+void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int xi, int xf) {
     int iteration = 1;
     for (int i = xi; i <= xf; i += iteration) {
         circle_save_points[iter_circle-1][0] += iteration;

@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
             case 'f':
                 make_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, &iter_circle, 400, 150, 12, pixel_color(255,0,0));
                 while (getchar() != 'g') {
-                    animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 400, 550, pixel_color(255,0,0));
+                    animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 400, 550);
                 }
                 iter_circle -= 1;
                 break;

@@ -124,7 +124,7 @@ void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
 /*
     Animate the buller (animation)
 */
-void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int xi, int xf, uint32_t color);
+void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circle_save_points)[3], int* polygon_save_color, int* circle_save_color, int iter_polygon, int iter_circle, int xi, int xf);
 
 /*
     Returning region codes for cohen sutherland algorithm
