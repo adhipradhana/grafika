@@ -4,14 +4,14 @@
 /* 
     Global variables
 */
-// Region codes for viewpoint 
+// Region codes for viewport
 int INSIDE = 0; // 0000 
 int LEFT = 1;   // 0001 
 int RIGHT = 2;  // 0010 
 int BOTTOM = 4; // 0100 
 int TOP = 8;    // 1000 
 
-// Viewpoint area declaration
+// Viewport area declaration
 const int x_max = 200; 
 const int y_max = 200; 
 const int x_min = 0; 
@@ -508,7 +508,7 @@ int is_color_same(int x, int y, uint32_t color) {
     Task 6
 */
 int is_out_of_bound(int x, int y) {
-    return (x >= vinfo.xres || y >= vinfo.yres || x < 0 || y < 0);
+    return (x >= x_max || y >= y_max || x < 0 || y < 0);
 }
 
 void debug() {
@@ -542,12 +542,12 @@ void flood_fill(int x, int y, uint32_t replacement_color) {
         struct QNode w = *newNode(node.x, node.y);
 
         // go to east
-        while (!is_color_same(e.x, e.y, replacement_color) && !is_out_of_bound(e.x, e.y)) {
+        while (!is_out_of_bound(e.x, e.y) && !is_color_same(e.x, e.y, replacement_color)) {
             e.x++;
         }
 
         // go to west
-        while (!is_color_same(w.x, w.y, replacement_color) && !is_out_of_bound(w.x, w.y)) {
+        while (!is_out_of_bound(w.x, w.y) && !is_color_same(w.x, w.y, replacement_color)) {
             w.x--;
         }
 
@@ -556,12 +556,12 @@ void flood_fill(int x, int y, uint32_t replacement_color) {
             print_point(x_temp, node.y, replacement_color);
 
             // check north
-            if (!is_color_same(x_temp, y_temp + 1, replacement_color) && !is_out_of_bound(x_temp, y_temp + 1)) {
+            if (!is_out_of_bound(x_temp, y_temp + 1) && !is_color_same(x_temp, y_temp + 1, replacement_color)) {
                 enQueue(q, x_temp, y_temp + 1);
             }
 
             // check south
-            if (!is_color_same(x_temp, y_temp - 1, replacement_color) && !is_out_of_bound(x_temp, y_temp - 1)) {
+            if (!is_out_of_bound(x_temp, y_temp - 1) && !is_color_same(x_temp, y_temp - 1, replacement_color)) {
                 enQueue(q, x_temp, y_temp - 1);
             }
         }
