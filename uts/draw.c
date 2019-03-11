@@ -48,6 +48,21 @@ void print_point(int x,int y, uint32_t color) {
 }
 
 /*
+    Task 1
+*/
+int print_bmp(char* filename, int posx, int posy, uint32_t color) {
+    FILE *bmp = fopen(filename, "r");
+    
+    int x, y;
+    fscanf(bmp, "%d,%d", &x, &y);
+    while (!feof(bmp)) {
+        print_point(x, y, color);
+        
+        fscanf(bmp, "%d,%d", &x, &y);
+    } 
+}
+
+/*
     Task 2
     Bresenham line algorithm
 */

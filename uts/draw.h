@@ -41,6 +41,11 @@ void clear_screen(uint32_t color);
 */
 void print_point(int x,int y, uint32_t color);
 
+/**
+ * Print list of pixel location on the screen in 'color'
+ */
+int print_bmp(char* filename, int posx, int posy, uint32_t color);
+
 /*
     Printing line from (x0, y0) to (x1, y1) with given color
 */

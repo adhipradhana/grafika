@@ -10,23 +10,21 @@ int iter_circle = 0;
 
 int tty_fd;
 
+// filename
+char *poly_file_name = "war_poly.txt";
+char *circle_file_name = "war_circle.txt";
+char *bitmap_file_name = "../image/anti.txt";
+char *lines_file_name = "lines.txt";
+char *menu_file_name = "../image/main_menu.txt";
+
 // menu
 void handle_menu();
+void handle_task_1();
 
 // transformation
 void handle_transformation();
 
 int main(int argc, char** argv) {
-<<<<<<< HEAD
-    char *poly_file_name = "war_poly.txt";
-    char *circle_file_name = "war_circle.txt";
-    char *bitmap_file_name = "names.txt";
-    char *lines_file_name = "lines.txt";
-=======
-    char *poly_file_name = "../image/poly.txt";
-    char *circle_file_name = "../image/circle.txt";
->>>>>>> 7bb066a958912eddd3969032509706d3fa775ad4
-    
     // Lock the screen from being re-rendered
     tty_fd = open("/dev/tty0", O_RDWR);
 	ioctl(tty_fd,KDSETMODE,KD_GRAPHICS);
@@ -56,29 +54,20 @@ int main(int argc, char** argv) {
      */
 	fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
 
-    // Render the screen to whole black
-    clear_screen(pixel_color(0, 0, 0));
-<<<<<<< HEAD
-    print_line(0, 0, 100, 100, pixel_color(255, 0, 0));
-    
     // Print menu screen
     handle_menu();
     
 	return 0;
 }
-=======
-    // Print image from input (argv[1] and argv[2] which contains list of pixel location) all white
-    print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, &iter_polygon);
-    print_file_circle(circle_file_name, circle_save_points, &iter_circle);
->>>>>>> 7bb066a958912eddd3969032509706d3fa775ad4
 
 void handle_menu() {
-    // Wait for input
-    char input = getchar();
     while(1) {
+        clear_screen(COLOR_RED);
+        print_bmp(menu_file_name, 0, 0, COLOR_YELLOW);
+        char input = getchar();
         switch(input) {
             case '1':
-                // print point
+                handle_task_1();
                 break;
             case '2':
                 // print line
@@ -103,8 +92,25 @@ void handle_menu() {
                 ioctl(tty_fd,KDSETMODE,KD_TEXT);
                 return;
         }
-        input = getchar();
     }
+}
+
+void handle_task_1() {
+    // print point
+    clear_screen(COLOR_BLACK);
+    print_bmp(bitmap_file_name, 0, 0, COLOR_RED);
+    while (1) {
+        char input = getchar();
+        if (input == 'q') {
+            return;
+        }   
+    }
+}
+
+void handle_task_2() {
+    // print line
+    clear_screen(COLOR_BLACK);
+    
 }
 
 void handle_transformation() {
@@ -153,11 +159,8 @@ void handle_transformation() {
                 iter_circle -= 1;
                 break;
             case 'e':
-                // Unlock the screen from being re-rendered
-                break;
-        }
-        if (input == 'e') {
-            break;
+                clear_screen(COLOR_BLACK);
+                return;
         }
         input = getchar();
     }
