@@ -542,12 +542,12 @@ void flood_fill(int x, int y, uint32_t replacement_color) {
         struct QNode w = *newNode(node.x, node.y);
 
         // go to east
-        while (!is_color_same(e.x, e.y, replacement_color) && !is_out_of_bound(e.x, e.y)) {
+        while (!is_out_of_bound(e.x, e.y) && !is_color_same(e.x, e.y, replacement_color)) {
             e.x++;
         }
 
         // go to west
-        while (!is_color_same(w.x, w.y, replacement_color) && !is_out_of_bound(w.x, w.y)) {
+        while (!is_out_of_bound(w.x, w.y) && !is_color_same(w.x, w.y, replacement_color)) {
             w.x--;
         }
 
@@ -556,12 +556,12 @@ void flood_fill(int x, int y, uint32_t replacement_color) {
             print_point(x_temp, node.y, replacement_color);
 
             // check north
-            if (!is_color_same(x_temp, y_temp + 1, replacement_color) && !is_out_of_bound(x_temp, y_temp + 1)) {
+            if (!is_out_of_bound(x_temp, y_temp + 1) && !is_color_same(x_temp, y_temp + 1, replacement_color)) {
                 enQueue(q, x_temp, y_temp + 1);
             }
 
             // check south
-            if (!is_color_same(x_temp, y_temp - 1, replacement_color) && !is_out_of_bound(x_temp, y_temp - 1)) {
+            if (!is_out_of_bound(x_temp, y_temp - 1) && !is_color_same(x_temp, y_temp - 1, replacement_color)) {
                 enQueue(q, x_temp, y_temp - 1);
             }
         }
