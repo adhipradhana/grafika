@@ -176,11 +176,11 @@ void print_file_line(char* filename, int posx, int posy, uint32_t color) {
 void print_polygon(int n, int* arr_coordinate, uint32_t color) {
     int i = 0;
     while (i < (n*2)-2) {
-        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
+        cohen_sutherland_clip(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
         i += 2;
     }
     if (n > 1) {
-        print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
+        cohen_sutherland_clip(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
     }
 
     int* centroid = compute_centroid(arr_coordinate, n);
