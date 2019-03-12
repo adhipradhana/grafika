@@ -339,6 +339,8 @@ void translation(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
     }
 
     clear_screen(pixel_color(0, 0, 0));
+    if (viewport)
+        print_viewport_line();
     print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
     print_circle_save(circle_save_points, circle_save_color, iter_circle, viewport, floodfill);
 }
@@ -359,6 +361,8 @@ void scale(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*circ
     }
 
     clear_screen(pixel_color(0, 0, 0));
+    if (viewport)
+        print_viewport_line();
     print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
     print_circle_save(circle_save_points, circle_save_color, iter_circle, viewport, floodfill);
 }
@@ -387,6 +391,8 @@ void rotate(int* polygon_save_sides, int (*polygon_save_points)[1000], int (*cir
     }
 
     clear_screen(pixel_color(0, 0, 0));
+    if (viewport)
+        print_viewport_line();
     print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
     print_circle_save(circle_save_points, circle_save_color, iter_circle, viewport, floodfill);
 }
@@ -401,6 +407,8 @@ void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
     *iter_circle += 1;
 
     clear_screen(pixel_color(0, 0, 0));
+    if (viewport)
+        print_viewport_line();
     print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
     print_circle_save(circle_save_points, circle_save_color, *iter_circle, viewport, floodfill);
 }
@@ -413,6 +421,8 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
     for (int i = xi; i <= xf; i += iteration) {
         circle_save_points[iter_circle-1][0] += iteration;
         clear_screen(pixel_color(0, 0, 0));
+        if (viewport)
+            print_viewport_line();
         print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
         print_circle_save(circle_save_points, circle_save_color, iter_circle, viewport, floodfill);
     }
@@ -420,6 +430,8 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
     for (int i = xf; i >= xi; i -= iteration) {
         circle_save_points[iter_circle-1][0] -= iteration;
         clear_screen(pixel_color(0, 0, 0));
+        if (viewport)
+            print_viewport_line();
         print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
         print_circle_save(circle_save_points, circle_save_color, iter_circle, viewport, floodfill);
     }
@@ -528,6 +540,16 @@ void cohen_sutherland_clip(int x1, int y1, int x2, int y2, uint32_t color) {
     if (accept) { 
         print_line(x1, y1, x2, y2, color);
     }
+}
+
+/*
+    Task 5
+*/
+void print_viewport_line() {
+    print_vertical_line(x_min,y_min,x_min,y_max, COLOR_WHITE); //left-side
+    print_vertical_line(x_max,y_min,x_max,y_max, COLOR_WHITE); //right-side
+    print_horizontal_line(x_min,y_min,x_max,y_min, COLOR_WHITE); //top-side
+    print_horizontal_line(x_min,y_max,x_max,y_max, COLOR_WHITE); //bottom-side
 }
 
 /*

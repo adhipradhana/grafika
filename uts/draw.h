@@ -146,6 +146,11 @@ int compute_region_code(int x, int y);
 void cohen_sutherland_clip(int x1, int y1, int x2, int y2, uint32_t color);
 
 /*
+    Print Rectangle at the end of viewport
+*/
+void print_viewport_line();
+
+/*
     Flood fill color
 */
 void flood_fill(int x, int y, uint32_t replacement_color);
