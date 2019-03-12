@@ -13,8 +13,8 @@ int BOTTOM = 4; // 0100
 int TOP = 8;    // 1000 
 
 // Viewport area declaration
-const int x_max = 1000; 
-const int y_max = 1000; 
+const int x_max = 500; 
+const int y_max = 500; 
 const int x_min = 0; 
 const int y_min = 0; 
 
