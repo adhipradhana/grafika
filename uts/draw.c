@@ -270,6 +270,7 @@ void print_file_polygon(char* filename, int* polygon_save_sides, int (*polygon_s
         fscanf(file, "%d,%d", &n, &color_code);
         *iter += 1;
     }
+    fclose(file);
 }
 
 /*
@@ -289,6 +290,7 @@ void print_file_circle(char* filename, int (*circle_save_points)[3], int* iter) 
         fscanf(file, "%d,%d,%d,%d", &x0, &y0, &r, &color_code);
         *iter += 1;
     } 
+    fclose(file);
 }
 
 /*

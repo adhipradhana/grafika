@@ -79,7 +79,7 @@ void handle_menu() {
                 handle_task_2();
                 break;
             case '3':
-                // print polygon and circle 
+                handle_task_3();
                 break;
             case '4':
                 // print transformation
@@ -117,6 +117,19 @@ void handle_task_2() {
     // print line
     clear_screen(COLOR_BLACK);
     print_file_line(lines_file_name, 0, 0);
+    while (1) {
+        char input = getchar();
+        if (input == 'q') {
+            return;
+        }
+    }
+}
+
+void handle_task_3() {
+    // print polygon and circle
+    clear_screen(COLOR_BLACK);
+    print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, &iter_polygon);
+    print_file_circle(circle_file_name, circle_save_points, &iter_circle);
     while (1) {
         char input = getchar();
         if (input == 'q') {
