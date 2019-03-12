@@ -60,6 +60,7 @@ int print_bmp(char* filename, int posx, int posy, uint32_t color) {
         
         fscanf(bmp, "%d,%d", &x, &y);
     } 
+    fclose(bmp);
 }
 
 /*
@@ -172,17 +173,21 @@ void print_horizontal_line(int x1, int y1, int x2, int y2, int color){
 /*
     Task 2
 */
-void print_file_line(char* filename, int posx, int posy, uint32_t color) {
+void print_file_line(char* filename, int posx, int posy) {
     FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        print_line(0,0,100,100,COLOR_BLUE);
+    }
     
-    int x1, y1, x2, y2;
-    fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
+    int x1, y1, x2, y2, color_code;
+    fscanf(file, "%d,%d,%d,%d,%d", &x1, &y1, &x2, &y2, &color_code);
 
     while (!feof(file)) {
-        cohen_sutherland_clip(x1, y1, x2, y2, color);
+        print_line(x1, y1, x2, y2, convertColorFromCode(color_code));
         
-        fscanf(file, "%d,%d,%d,%d", &x1, &y1, &x2, &y2);
+        fscanf(file, "%d,%d,%d,%d,%d", &x1, &y1, &x2, &y2, &color_code);
     } 
+    fclose(file);
 }
 
 /*

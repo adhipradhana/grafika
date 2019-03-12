@@ -14,12 +14,18 @@ int tty_fd;
 char *poly_file_name = "war_poly.txt";
 char *circle_file_name = "war_circle.txt";
 char *bitmap_file_name = "../image/anti.txt";
-char *lines_file_name = "lines.txt";
+char *lines_file_name = "../image/lines_large.txt";
 char *menu_file_name = "../image/main_menu.txt";
 
 // menu
 void handle_menu();
 void handle_task_1();
+void handle_task_2();
+void handle_task_3();
+void handle_task_4();
+void handle_task_5();
+void handle_task_6();
+void handle_task_7();
 
 // transformation
 void handle_transformation();
@@ -70,7 +76,7 @@ void handle_menu() {
                 handle_task_1();
                 break;
             case '2':
-                // print line
+                handle_task_2();
                 break;
             case '3':
                 // print polygon and circle 
@@ -110,7 +116,13 @@ void handle_task_1() {
 void handle_task_2() {
     // print line
     clear_screen(COLOR_BLACK);
-    
+    print_file_line(lines_file_name, 0, 0);
+    while (1) {
+        char input = getchar();
+        if (input == 'q') {
+            return;
+        }
+    }
 }
 
 void handle_transformation() {

@@ -74,7 +74,7 @@ void print_horizontal_line(int x1, int y1, int x2, int y2, int color);
 /*
     Displaying files given line
 */
-void print_file_line(char* filename, int posx, int posy, uint32_t color);
+void print_file_line(char* filename, int posx, int posy);
 
 /*
     Printing polygon given a list of coordinates
