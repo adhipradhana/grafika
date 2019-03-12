@@ -4,7 +4,9 @@
 //File saves
 int polygon_save_sides[1000];
 int polygon_save_points[1000][1000];
+int polygon_save_color[1000];
 int circle_save_points[1000][3];
+int circle_save_color[1000];
 int iter_polygon = 0;
 int iter_circle = 0;
 
@@ -28,7 +30,7 @@ void handle_task_6();
 void handle_task_7();
 
 // transformation
-void handle_transformation();
+void handle_transformation_task_4();
 
 int main(int argc, char** argv) {
     // Lock the screen from being re-rendered
@@ -73,16 +75,20 @@ void handle_menu() {
         char input = getchar();
         switch(input) {
             case '1':
+                // print bitmap
                 handle_task_1();
                 break;
             case '2':
+                // print lines
                 handle_task_2();
                 break;
             case '3':
+                // print polygon and circle
                 handle_task_3();
                 break;
             case '4':
                 // print transformation
+                handle_task_4();
                 break;
             case '5':
                 // print viewpoint
@@ -128,8 +134,8 @@ void handle_task_2() {
 void handle_task_3() {
     // print polygon and circle
     clear_screen(COLOR_BLACK);
-    print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, &iter_polygon);
-    print_file_circle(circle_file_name, circle_save_points, &iter_circle);
+    print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, false, false);
+    print_file_circle(circle_file_name, circle_save_points, circle_save_color, &iter_circle, false, false);
     while (1) {
         char input = getchar();
         if (input == 'q') {
@@ -138,7 +144,15 @@ void handle_task_3() {
     }
 }
 
-void handle_transformation() {
+void handle_task_4() {
+    // print polygon and circle
+    clear_screen(COLOR_BLACK);
+    print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, false, false);
+    print_file_circle(circle_file_name, circle_save_points, circle_save_color, &iter_circle, false, false);
+    handle_transformation_task_4();
+}
+
+void handle_transformation_task_4() {
     // Wait for input
     char input = getchar();
     while(1) {
@@ -148,42 +162,42 @@ void handle_transformation() {
                 switch(getchar()) { // the real value
                     case 'A':
                         // code for arrow up
-                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, -10, pixel_color(255, 0, 0));
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0, -10, false, false);
                         break;
                     case 'B':
                         // code for arrow down
-                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0, 10, pixel_color(255, 0, 0));
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0, 10, false, false);
                         break;
                     case 'C':
                         // code for arrow right
-                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 10, 0, pixel_color(255, 0, 0));
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 10, 0, false, false);
                         break;
                     case 'D':
                         // code for arrow left
-                        translation(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -10, 0, pixel_color(255, 0, 0));
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, -10, 0, false, false);
                         break;
                 }
                 break;
             case 'u': //scale up
-                scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 1.2, pixel_color(255, 0, 0));
+                scale(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 1.2, false, false);
                 break;
             case 'i': //scale down
-                scale(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.8, pixel_color(255, 0, 0));
+                scale(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0.8, false, false);
                 break;
             case 'r': //rotate counter-clockwise
-                rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 0.04, pixel_color(255, 0, 0));
+                rotate(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0.04, false, false);
                 break;
             case 't':
-                rotate(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, -0.04, pixel_color(255, 0, 0));
+                rotate(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, -0.04, false, false);
                 break;
             case 'f':
-                make_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, &iter_circle, 400, 150, 12, pixel_color(255,0,0));
+                make_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, &iter_circle, 400, 150, 12, COLOR_RED, false, false);
                 while (getchar() != 'g') {
-                    animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, iter_polygon, iter_circle, 400, 550, pixel_color(255,0,0));
+                    animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 400, 550, false, false);
                 }
                 iter_circle -= 1;
                 break;
-            case 'e':
+            case 'q':
                 clear_screen(COLOR_BLACK);
                 return;
         }
