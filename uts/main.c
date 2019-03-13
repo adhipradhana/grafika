@@ -211,7 +211,7 @@ void handle_transformation(int viewport, int floodfill) {
                 while (getchar() != 'g') {
                     animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 400, 550, viewport, floodfill);
                 }
-                iter_circle -= 1;
+                // iter_circle -= 1;
                 break;
             case 'q':
                 clear_screen(COLOR_BLACK);

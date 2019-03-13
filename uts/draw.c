@@ -404,6 +404,7 @@ void make_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], int 
     circle_save_points[*iter_circle][0] = x;
     circle_save_points[*iter_circle][1] = y;
     circle_save_points[*iter_circle][2] = r;
+    circle_save_color[*iter_circle] = 4;
     *iter_circle += 1;
 
     clear_screen(pixel_color(0, 0, 0));
@@ -420,7 +421,7 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
     int iteration = 1;
     for (int i = xi; i <= xf; i += iteration) {
         circle_save_points[iter_circle-1][0] += iteration;
-        clear_screen(pixel_color(0, 0, 0));
+        clear_screen(COLOR_BLACK);
         if (viewport)
             print_viewport_line();
         print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
@@ -429,7 +430,7 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
 
     for (int i = xf; i >= xi; i -= iteration) {
         circle_save_points[iter_circle-1][0] -= iteration;
-        clear_screen(pixel_color(0, 0, 0));
+        clear_screen(COLOR_BLACK);
         if (viewport)
             print_viewport_line();
         print_polygon_save(polygon_save_sides, polygon_save_points, polygon_save_color, iter_polygon, viewport, floodfill);
@@ -593,23 +594,23 @@ void flood_fill(int x, int y, uint32_t replacement_color) {
 
     // loop
     while (q->front != NULL) {
-        struct QNode node = *deQueue(q);
-        struct QNode e = *newNode(node.x, node.y);
-        struct QNode w = *newNode(node.x, node.y);
+        struct QNode *node = deQueue(q);
+        struct QNode *e = newNode(node->x, node->y);
+        struct QNode *w = newNode(node->x, node->y);
 
         // go to east
-        while (!is_out_of_bound(e.x, e.y) && !is_color_same(e.x, e.y, replacement_color)) {
-            e.x++;
+        while (!is_out_of_bound(e->x, e->y) && !is_color_same(e->x, e->y, replacement_color)) {
+            e->x++;
         }
 
         // go to west
-        while (!is_out_of_bound(w.x, w.y) && !is_color_same(w.x, w.y, replacement_color)) {
-            w.x--;
+        while (!is_out_of_bound(w->x, w->y) && !is_color_same(w->x, w->y, replacement_color)) {
+            w->x--;
         }
 
-        int y_temp = node.y;
-        for (int x_temp = w.x + 1; x_temp < e.x; x_temp++) {
-            print_point(x_temp, node.y, replacement_color);
+        int y_temp = node->y;
+        for (int x_temp = w->x + 1; x_temp < e->x; x_temp++) {
+            print_point(x_temp, node->y, replacement_color);
 
             // check north
             if (!is_out_of_bound(x_temp, y_temp + 1) && !is_color_same(x_temp, y_temp + 1, replacement_color)) {
@@ -621,7 +622,11 @@ void flood_fill(int x, int y, uint32_t replacement_color) {
                 enQueue(q, x_temp, y_temp - 1);
             }
         }
+        free(node);
+        free(e);
+        free(w);
     }
+    free(q);
 }
 
 // /*
