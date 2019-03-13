@@ -141,9 +141,14 @@ void animate_bullet(int* polygon_save_sides, int (*polygon_save_points)[1000], i
 int compute_region_code(int x, int y);
 
 /*
+    Drawing point inside a viewpoint
+*/
+void print_point_inside(int x,int y, uint32_t color);
+
+/*
     Drawing line inside a viewpoint
 */
-void cohen_sutherland_clip(int x1, int y1, int x2, int y2, uint32_t color);
+void print_line_inside(int x1, int y1, int x2, int y2, uint32_t color);
 
 /*
     Print Rectangle at the end of viewport

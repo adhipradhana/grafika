@@ -197,14 +197,14 @@ void print_polygon(int n, int* arr_coordinate, uint32_t color, int viewport, int
     int i = 0;
     while (i < (n*2)-2) {
         if (viewport)
-            cohen_sutherland_clip(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
+            print_line_inside(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
         else 
             print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[i+2], arr_coordinate[i+3], color);
         i += 2;
     }
     if (n > 1) {
         if (viewport)
-            cohen_sutherland_clip(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
+            print_line_inside(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
         else
             print_line(arr_coordinate[i], arr_coordinate[i+1], arr_coordinate[0], arr_coordinate[1], color);
     }
@@ -229,17 +229,17 @@ void print_circle(int x0, int y0, int r, uint32_t color, int viewport, int flood
 
     while (x >= y)
     {
-        print_point(x0 + x, y0 + y, color);
-        print_point(x0 + y, y0 + x, color);
+        print_point_inside(x0 + x, y0 + y, color);
+        print_point_inside(x0 + y, y0 + x, color);
 
-        print_point(x0 - y, y0 + x, color);
-        print_point(x0 - x, y0 + y, color);
+        print_point_inside(x0 - y, y0 + x, color);
+        print_point_inside(x0 - x, y0 + y, color);
 
-        print_point(x0 - x, y0 - y, color);
-        print_point(x0 - y, y0 - x, color);
+        print_point_inside(x0 - x, y0 - y, color);
+        print_point_inside(x0 - y, y0 - x, color);
 
-        print_point(x0 + y, y0 - x, color);
-        print_point(x0 + x, y0 - y, color);
+        print_point_inside(x0 + y, y0 - x, color);
+        print_point_inside(x0 + x, y0 - y, color);
 
         if (err <= 0) {
             y++;
@@ -461,7 +461,13 @@ int compute_region_code(int x, int y) {
 /*
     Task 5
 */
-void cohen_sutherland_clip(int x1, int y1, int x2, int y2, uint32_t color) {
+void print_point_inside(int x,int y, uint32_t color) {
+    if (!(x >= x_max || y >= y_max || x < 0 || y < 0)) {
+        print_point(x, y, color);
+    }
+}
+
+void print_line_inside(int x1, int y1, int x2, int y2, uint32_t color) {
     // Compute region codes for P1, P2 
     int code1 = compute_region_code(x1, y1); 
     int code2 = compute_region_code(x2, y2); 
