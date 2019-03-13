@@ -178,11 +178,11 @@ void handle_transformation(int viewport, int floodfill) {
                 switch(getchar()) { // the real value
                     case 'A':
                         // code for arrow up
-                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0, -10, viewport, floodfill);
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0, 10, viewport, floodfill);
                         break;
                     case 'B':
                         // code for arrow down
-                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0, 10, viewport, floodfill);
+                        translation(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 0, -10, viewport, floodfill);
                         break;
                     case 'C':
                         // code for arrow right
