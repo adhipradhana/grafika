@@ -57,6 +57,7 @@ int print_bmp(char* filename, int posx, int posy, uint32_t color) {
     int x, y;
     fscanf(bmp, "%d,%d", &x, &y);
     while (!feof(bmp)) {
+        y = vinfo.yres - y - 1;
         print_point(x, y, color);
         
         fscanf(bmp, "%d,%d", &x, &y);
