@@ -564,6 +564,7 @@ void print_viewport_line() {
     Task 6
 */
 int is_color_same(int x, int y, uint32_t color) {
+    y = vinfo.yres - y - 1;
     long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
     return *((uint32_t*)(fbp + location)) == color;
 }
