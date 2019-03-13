@@ -28,7 +28,9 @@ void handle_task_4();
 void handle_task_5();
 void handle_task_6();
 
-// transformation
+/*
+ *  Function prototypes
+ */
 void handle_transformation(int, int);
 
 int main(int argc, char** argv) {
@@ -65,6 +67,11 @@ int main(int argc, char** argv) {
     handle_menu();
     
 	return 0;
+}
+
+void reset_transformation() {
+    iter_polygon = 0;
+    iter_circle = 0;
 }
 
 void handle_menu() {
@@ -144,6 +151,7 @@ void handle_task_3() {
 
 void handle_task_4() {
     // transformation
+    reset_transformation();
     clear_screen(COLOR_BLACK);
     print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, false, false);
     print_file_circle(circle_file_name, circle_save_points, circle_save_color, &iter_circle, false, false);
@@ -152,6 +160,7 @@ void handle_task_4() {
 
 void handle_task_5() {
     // viewport
+    reset_transformation();
     clear_screen(COLOR_BLACK);
     print_viewport_line();
     print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, true, false);
@@ -161,6 +170,7 @@ void handle_task_5() {
 
 void handle_task_6() {
     // floodfill
+    reset_transformation();
     clear_screen(COLOR_BLACK);
     print_viewport_line();
     print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, true, true);
