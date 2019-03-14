@@ -146,6 +146,7 @@ void handle_task_3() {
     clear_screen(COLOR_BLACK);
     print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, false, false);
     print_file_circle(circle_file_name, circle_save_points, circle_save_color, &iter_circle, false, false);
+    scanline_fill(COLOR_BLACK);
     while (1) {
         char input = getchar();
         if (input == 'q') {

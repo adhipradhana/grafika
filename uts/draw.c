@@ -13,8 +13,8 @@ int BOTTOM = 4; // 0100
 int TOP = 8;    // 1000 
 
 // Viewport area declaration
-const int x_max = 500; 
-const int y_max = 500; 
+const int x_max = 2000; 
+const int y_max = 2000; 
 const int x_min = 0; 
 const int y_min = 0; 
 
@@ -670,11 +670,11 @@ uint32_t get_color(int x, int y) {
     Task 7
 */
 void scanline_fill(uint32_t base_color) {
-    for (int y = 0; y < y_max; y++) {
+    for (int y = y_min; y <= y_max; y++) {
         int fill_mode = false;
         uint32_t fill_color;
         
-        for (int x = 0; x < x_max; x++) {
+        for (int x = x_min; x <= x_max; x++) {
             if (!fill_mode && !is_color_same(x, y, base_color)) {
                 fill_mode = true;
                 fill_color = get_color(x, y);
