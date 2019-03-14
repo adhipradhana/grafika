@@ -175,4 +175,14 @@ int is_out_of_bound(int x, int y);
 */
 int* compute_centroid(int* vertices, int vertexCount);
 
+/*
+    Scanline fill (only for polygon)
+*/
+void scanline_fill(uint32_t base_color);
+
+/*
+    Get color hex
+*/
+uint32_t get_color(int x, int y);
+
 #endif

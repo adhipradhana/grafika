@@ -657,3 +657,33 @@ int* compute_centroid(int* vertices, int n) {
     return centroid;
 }
 
+/*
+    Task 7
+*/
+uint32_t get_color(int x, int y) {
+    y = vinfo.yres - y - 1;
+    long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
+    return *((uint32_t*)(fbp + location));
+}
+
+/*
+    Task 7
+*/
+void scanline_fill(uint32_t base_color) {
+    for (int y = 0; y < y_max; y++) {
+        int fill_mode = false;
+        uint32_t fill_color;
+        
+        for (int x = 0; x < x_max; x++) {
+            if (!fill_mode && !is_color_same(x, y, base_color)) {
+                fill_mode = true;
+                fill_color = get_color(x, y);
+            } else if (fill_mode && is_color_same(x, y, fill_color)) {
+                fill_mode = false;
+            } else if (fill_mode && is_color_same(x, y, base_color)) {
+                print_point_inside(x, y, fill_color);
+            }
+        }
+    }
+}
+
