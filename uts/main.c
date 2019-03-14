@@ -27,6 +27,7 @@ void handle_task_3();
 void handle_task_4();
 void handle_task_5();
 void handle_task_6();
+void handle_task_7();
 
 /*
  *  Function prototypes
@@ -104,6 +105,10 @@ void handle_menu() {
                 // print flood fill
                 handle_task_6();
                 break;
+            case '7':
+                // animation
+                handle_task_7();
+                break;
             case 'q':
                 // exit
                 ioctl(tty_fd,KDSETMODE,KD_TEXT);
@@ -176,6 +181,19 @@ void handle_task_6() {
     print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, true, true);
     print_file_circle(circle_file_name, circle_save_points, circle_save_color, &iter_circle, true, true);
     handle_transformation(true, true);
+}
+
+void handle_task_7() {
+    // Animation
+    reset_transformation();
+    clear_screen(COLOR_BLACK);
+    print_viewport_line();
+    print_file_polygon(poly_file_name, polygon_save_sides, polygon_save_points, polygon_save_color, &iter_polygon, true, true);
+    print_file_circle(circle_file_name, circle_save_points, circle_save_color, &iter_circle, true, true);
+    make_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, &iter_circle, 400, 150, 12, COLOR_AQUAMARINE, false, true);
+    while (getchar() != 'q') {
+        animate_bullet(polygon_save_sides, polygon_save_points, circle_save_points, polygon_save_color, circle_save_color, iter_polygon, iter_circle, 400, 550, false, true);
+    } 
 }
 
 void handle_transformation(int viewport, int floodfill) {
