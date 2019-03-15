@@ -16,7 +16,7 @@ int tty_fd;
 char *poly_file_name = "war_poly.txt";
 char *circle_file_name = "war_circle.txt";
 char *bitmap_file_name = "../image/anti.txt";
-char *lines_file_name = "../image/lines_large.txt";
+char *lines_file_name = "../image/lines_transformed.txt";
 char *menu_file_name = "../image/main_menu.txt";
 
 // menu

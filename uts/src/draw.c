@@ -178,7 +178,10 @@ void print_horizontal_line(int x1, int y1, int x2, int y2, int color){
 void print_file_line(char* filename, int posx, int posy) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        print_line(0,0,100,100,COLOR_BLUE);
+        print_line(10,10,300,300,COLOR_RED);
+        print_line(300,300,550,0,COLOR_RED);
+        print_line(550,0,10,10,COLOR_RED);
+        return;
     }
     
     int x1, y1, x2, y2, color_code;
